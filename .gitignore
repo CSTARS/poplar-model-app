@@ -1,0 +1,10 @@
+bower_components
+node_modules
+.DS_Store
+
+phonegap/3pg-model/platforms/android
+phonegap/3pg-model/plugins
+.tmp
+.sass-cache
+phonegap_build
+phonegap/3pg-model/www/dist
