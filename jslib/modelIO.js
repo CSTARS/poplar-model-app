@@ -210,9 +210,9 @@ module.exports = {
 
       // load config
       if (setup.config.chartTypeInput) {
-          charts.unselectAll();
+          this.charts.unselectAll();
           for ( var i = 0; i < setup.config.chartTypeInput.length; i++) {
-              charts.select(setup.config.chartTypeInput[i]);
+              this.charts.select(setup.config.chartTypeInput[i]);
           }
       }
       if (setup.config.currentLocation) {
@@ -223,15 +223,28 @@ module.exports = {
       }
 
       // load weather
-      for ( var i = 0; i < setup.weather.length; i++) {
-          for ( var key in setup.weather[i]) {
-              if (key == 'month')
-                  continue;
-              if (setup.weather[i][key] != null)
-                  $("#input-weather-" + key + "-" + i).val(setup.weather[i][key])
-              else
-                  $("#input-weather-" + key + "-" + i).val("");
-          }
+      if( Array.isArray(setup.weather) ) {
+        for ( var i = 0; i < setup.weather.length; i++) {
+            for ( var key in setup.weather[i]) {
+                if (key == 'month')
+                    continue;
+                if (setup.weather[i][key] != null)
+                    $("#input-weather-" + key + "-" + i).val(setup.weather[i][key])
+                else
+                    $("#input-weather-" + key + "-" + i).val("");
+            }
+        }
+      } else {
+        for ( var i in setup.weather ) {
+            for ( var key in setup.weather[i]) {
+                if (key == 'month')
+                    continue;
+                if (setup.weather[i][key] != null)
+                    $("#input-weather-" + key + "-" + i).val(setup.weather[i][key])
+                else
+                    $("#input-weather-" + key + "-" + i).val("");
+            }
+        }
       }
 
       if( setup.custom_weather ) {
@@ -241,7 +254,7 @@ module.exports = {
       }
 
       // create the chart
-      inputForm.updateAverageChart();
+      this.inputForm.updateAverageChart();
 
       // load tree
       this.loadTree(setup.tree);
@@ -288,6 +301,6 @@ module.exports = {
               }
           }
       }
-      this.model.runModel(isRt);
+      this.app.runModel(isRt);
   }
 };

@@ -46,11 +46,14 @@ function qs(key) {
 }
 
 var init = function(callback) {
-	modelIO.app = this;
-	modelIO.model = model;
 	inputForm = require('./inputForm')(this);
 	charts = require('./charts');
 	charts.setApp(this);
+
+	modelIO.app = this;
+	modelIO.model = model;
+	modelIO.charts = charts;
+	modelIO.inputForm = inputForm;
 
   // check if flash is installed.  If not, hide the chart type toggle.
   require('./flashBlock-detector')(function(val){
@@ -483,5 +486,8 @@ module.exports = {
   qs : qs,
   setWeather : setWeather,
 	gdrive : gdrive,
-	runComplete : runComplete
+	runComplete : runComplete,
+	getModelIO : function() {
+		return modelIO;
+	}
 };
