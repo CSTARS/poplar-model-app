@@ -28,31 +28,30 @@ function onChartsLoaded() {
         // TODO
         //if( devmode ) app.devmode = true;
 
-  PoplarApp.loadModelCode(version, function(){
-      $("#status").html("3pg data");
-        $("body").html("").load("app.html", function(){
-        PoplarApp.init(function(){
-            if( offlineMode ) {
-                offline.render();
-            } else {
-                PoplarApp.gdrive.init(function(){
-                    var file = PoplarApp.qs("file");
-                    if( file ) {
-                        PoplarApp.gdrive.load(file, initLoading);
-                    }
-                    // see if we are loading for google drive
-                    var state = PoplarApp.qs("state");
-                    if( state ) {
-                        state = JSON.parse(state);
-                        initLoading();
-                        PoplarApp.gdrive.load(state.ids[0], initLoading);
-                    }
-                });
-            }
-        });
-      });
+  $("#status").html("3pg data");
+  $("body").html("").load("app.html", function(){
+    PoplarApp.init(function(){
+        if( offlineMode ) {
+            offline.render();
+        } else {
+            PoplarApp.gdrive.init(function(){
+                var file = PoplarApp.qs("file");
+                if( file ) {
+                    PoplarApp.gdrive.load(file, initLoading);
+                }
+                // see if we are loading for google drive
+                var state = PoplarApp.qs("state");
+                if( state ) {
+                    state = JSON.parse(state);
+                    initLoading();
+                    PoplarApp.gdrive.load(state.ids[0], initLoading);
+                }
+            });
+        }
     });
-};
+  });
+
+}
 
 if( chartsLoaded ) {
     onChartsLoaded();

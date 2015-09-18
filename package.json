@@ -1,7 +1,9 @@
 {
   "name": "yeoman",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "poplar-3pg-model": "^1.0.0"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-appcache": "^0.1.8",

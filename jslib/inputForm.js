@@ -101,7 +101,7 @@ function _addInput(options) {
 }
 
 function _createWeatherInputs() {
-  for( var attr in app.getModel().weather ) {
+  for( var attr in app.getModel().getDataModel().weather ) {
     if( attr != "nrel" ) cols.push(attr);
   }
 
@@ -364,16 +364,12 @@ function _generateInputs(i, type, prefix, name, attrs) {
 }
 
 function create(ele) {
-
-
-      weatherFileReader.init();
-
-
+  weatherFileReader.init();
   var model, m, attr, config;
 
-      var inputs = $.extend(true, {}, app.getModel());
+  var inputs = $.extend(true, {}, app.getModel().getDataModel());
 
-      inputs['setup'] = {};
+  inputs['setup'] = {};
   for( model in inputs ) {
     m = inputs[model];
     for( attr in m ) {

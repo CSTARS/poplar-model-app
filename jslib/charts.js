@@ -138,18 +138,20 @@ function _createDescription(val) {
   }
 
   var fName = desc.altFnName || val;
-  if( m3PGFunc[fName] || m3PGFunc.coppice[fName] || desc.fn ) {
+  var fn = app.getModel().getFunction(fName);
+
+  if( fn || desc.fn ) {
       if( !hasDesc ) label += "<div style='font-size:11px'>";
       label += " <a style='font-style:normal;cursor:pointer' datatarget='fn-desc-"+val+"' class='fn-toggle'>fn()</a></div>";
 
       label += "<div id='fn-desc-"+val+"' style='display:none;font-size:11px;overflow:auto' class='well well-sm'>"+
-                  (m3PGFunc[fName]||m3PGFunc.coppice[fName]||desc.fn).toString().replace(/ /g,'&nbsp;').replace(/\n/g,'<br />')+"</div>";
+                  (fn||desc.fn).toString().replace(/ /g,'&nbsp;').replace(/\n/g,'<br />')+"</div>";
   } else if ( hasDesc ) {
-      label += "</div>"
+      label += "</div>";
   }
 
   // TODO: add fn well
-  return label+"<br />"
+  return label+"<br />";
 }
 
 function select(val) {
