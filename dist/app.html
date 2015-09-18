@@ -8,11 +8,11 @@
         </button>
 
         <a class="navbar-brand hidden-xs">
-            <img src="logo_128.png" style="width:24px;height:24px" border="0">
+            <img src="logo_128.png" style="width:24px;height:24px" border="0" />
             <span>AHB - 3PG Model</span>
         </a>
         <a class="navbar-brand visible-xs">
-            <img src="logo_128.png" style="width:24px;height:24px" border="0">
+            <img src="logo_128.png" style="width:24px;height:24px" border="0" />
         </a>
     </div>
         
@@ -23,7 +23,7 @@
                 <span class="hidden-sm"><i class="icon-angle-right"></i> Inputs</span>
                 <span class="visible-sm"><i class="icon-angle-right"></i></span>
             </a>
-        </li><li>
+        <li>
             <a href="#chart" class="app-nav">
                 <span class="hidden-sm"><i class="icon-bar-chart"></i> Charts</span>
                 <span class="visible-sm"><i class="icon-bar-chart"></i></span>
@@ -42,7 +42,7 @@
         </li>
       </ul>
 
-      <ul class="nav navbar-nav navbar-right" id="login-header">
+      <ul class="nav navbar-nav navbar-right"  id="login-header">
       </ul>
 
     </div>
@@ -62,7 +62,7 @@
     
 		<section id="inputs">
 	                <div class="page-header">
-	                        <h1>Inputs <a class="btn btn-default select-weather-location" style="margin-left:25px"><i class="icon-map-marker"></i> Location</a></h1>
+	                        <h1>Inputs <a class='btn btn-default select-weather-location' style="margin-left:25px"><i class='icon-map-marker'></i> Location</a></h1>
 	                </div>
 	               <div id="inputs-content"></div>
 	    </section>
@@ -74,16 +74,16 @@
 	                        <h1>Charts 
 	                           <a class="btn btn-default" style="margin-left:25px" id="select-charts-title-btn"><i class="icon-plus"></i> Add</a>
                                <div class="btn-group" id="chart-type-btn-group">
-                                    <button type="button" class="btn btn-default active chart-type-toggle" value="line">Basic</button>
-                                    <button type="button" class="btn btn-default chart-type-toggle" value="timeline">Interactive</button>
+                                    <button type="button" class="btn btn-default active chart-type-toggle" value="line" >Basic</button>
+                                    <button type="button" class="btn btn-default chart-type-toggle" value="timeline" >Interactive</button>
                                 </div>
-	                           <a class="btn btn-default pull-right" id="show-chartspopup-btn"><i class="icon-fullscreen"></i></a>
+	                           <a class="btn btn-default pull-right" id="show-chartspopup-btn" ><i class="icon-fullscreen"></i></a>
 	                        </h1>
 	                </div>
 	               <div id="chart-content">
-	                   <div style="text-align:center"><i class="icon-bar-chart blank-icon"></i></div>
+	                   <div style="text-align:center;"><i class="icon-bar-chart blank-icon"></i></div>
 	                   <div style="text-align:center;maring-top:25px;font-size:20px;color:#ccc">
-	                       Select <i class="icon-map-marker"></i> Location to run model.<br>
+	                       Select <i class="icon-map-marker"></i> Location to run model.<br />
 	                       Click <i class="icon-play"></i> Run at any time to rerun model.
 	                   </div>
 	               </div>
@@ -93,10 +93,10 @@
     
     <section id="output">
             <div class="page-header">
-                    <h1>Raw Output <a class="btn btn-default" id="show-export-csv" style="margin-left:25px;display:none"><i class="icon-external-link"></i> Export CSV</a></h1>
+                    <h1>Raw Output <a class='btn btn-default' id="show-export-csv" style="margin-left:25px;display:none"><i class='icon-external-link'></i> Export CSV</a></h1>
             </div>
            <div id="output-content" style="overflow:hidden">
-                    <div style="text-align:center"><i class="icon-table blank-icon"></i></div>
+                    <div style="text-align:center;"><i class="icon-table blank-icon"></i></div>
            </div>
      </section>
     
@@ -114,13 +114,13 @@
        		<div id="gmap" style="height:350px;width:100%;border:1px solid #ccc"></div>
        		<h4 class="page-header" style="padding:10px;margin-top:20px">Click map to select location
        		<button id="locate-button" class="btn btn-success pull-right" style="margin-top:-15px"><i class="icon-screenshot"></i>&nbsp;Locate Me</button></h4>
-          <h4>Cache Mode <div class="pull-right" style="font-size:14px;font-weight: normal"><input type="checkbox" id="locate-cache-mode"> Enable</div></h4>
-          <div class="help-block">Enable cache mode to select tiles to cache for offline use. <br><a style="cursor:pointer" id="clear-cached-tiles">Clear Cached Tiles</a></div>
+          <h4>Cache Mode <div class="pull-right" style="font-size:14px;font-weight: normal" ><input type="checkbox" id="locate-cache-mode" /> Enable</div></h4>
+          <div class="help-block">Enable cache mode to select tiles to cache for offline use. <br /><a style="cursor:pointer" id="clear-cached-tiles">Clear Cached Tiles</a></div>
           <div id="locate-cache-mode-loading" style="display:none">Loading...</div>
           <div id="locate-cache-save-panel" style="display:none;margin-top:5px;padding:10px;border-top:1px solid #eee">
               <div style="padding-bottom: 5px">Tile: <span id="locate-cache-save-pid" style="font-weight:bold"></span></div>
               <div>
-                Name: &nbsp;<input type="text" class="form-control" id="locate-cache-save-name" style="display:inline-block;width:200px"><br>
+                Name: &nbsp;<input type="text" class="form-control" id="locate-cache-save-name" style="display:inline-block;width:200px" /><br />
                 <div class="help-block">Provide a name to remember this tile by.  Ex: 'Sacramento', 'Home'.</div>
               </div>
               <div>
@@ -137,7 +137,7 @@
         </div>
       </div>
       <div class="modal-footer">
-     	<a class="btn btn-default pull-right" data-dismiss="modal">Cancel</a>
+     	<a class="btn btn-default pull-right" data-dismiss="modal" >Cancel</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -148,7 +148,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<img src="images/a8b428bf.gdrive_icon.png" style="height:24px;width:24px"> Save to Google Drive
+		<img src="images/gdrive_icon.png" style="height:24px;width:24px" /> Save to Google Drive
       </div>
       <div class="modal-body">
           <div id="gdrive-save-subheader"></div>
@@ -158,13 +158,13 @@
       			<a class="btn btn-success" id="save-update-btn"><i class="icon-save"></i> Update</a>
       		</div>
      		  <div>
-            Name: <input type="text" class="form-control" id="save-name-input"><br>
-     		    Description: <textarea class="form-control" id="save-description-input"></textarea>
+            Name: <input type="text" class="form-control" id="save-name-input" /><br />
+     		    Description: <textarea class="form-control" id="save-description-input" ></textarea>
      		  </div>
       </div>
       <div class="modal-footer">
-      	<a class="btn btn-success pull-right" id="save-new-btn" style="margin-left:10px"><i class="icon-cloud-upload"></i> Save as New</a>
-     	<a class="btn btn-default pull-right" data-dismiss="modal">Cancel</a>
+      	<a class="btn btn-success pull-right" id="save-new-btn" style="margin-left:10px" ><i class="icon-cloud-upload"></i> Save as New</a>
+     	<a class="btn btn-default pull-right" data-dismiss="modal" >Cancel</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -174,13 +174,13 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close chart-modal-close">&times;</button>
+        <button type="button" class="close chart-modal-close" >&times;</button>
         Select variable(s) to chart
       </div>
       <div class="modal-body">
             <select class="minput" id="chartTypeInput" multiple="multiple" style="display:none"></select>
-            <a style="cursor:pointer" id="chartType-selectAll">Select All</a> | 
-            <a style="cursor:pointer" id="chartType-unselectAll">Unselect All</a>
+            <a style="cursor:pointer" id="chartType-selectAll" >Select All</a> | 
+            <a style="cursor:pointer" id="chartType-unselectAll" >Unselect All</a>
             <div class="row" id="chartSelections">
                 <div class="col-md-6" id="chartSelections-c1"></div>
                 <div class="col-md-6" id="chartSelections-c2"></div>
@@ -204,7 +204,7 @@
 
             <div style="text-align:center">
               <h2 style="margin-top:0px">
-                <img src="logo_196.png" style="width:58px;height:58px;vertical-align:top;margin-right:25px">
+                <img src="logo_196.png" style="width:58px;height:58px;vertical-align:top;margin-right:25px" />
                 <span style="vertical-align:bottom">AHB - 3PG Model</span>
               </h2>
             </div>
@@ -217,8 +217,8 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
             </div>
             <h4>Links</h4>
             <div class="well">
-                <a href="http://hardwoodbiofuels.org/" target="_blank">AHB Website</a><br>
-                <a href="https://plus.google.com/107620944323155568384/posts" target="_blank">UC Davis AHB Group on Google+</a><br>
+                <a href="http://hardwoodbiofuels.org/" target="_blank">AHB Website</a><br />
+                <a href="https://plus.google.com/107620944323155568384/posts" target="_blank">UC Davis AHB Group on Google+</a><br />
                 <a href="http://www.ucdavis.edu" target="_blank">UC Davis</a>
             </div>
             <h4>Developers</h4>
@@ -260,12 +260,12 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
             <div style="padding:15px;text-align:center;color:#666;font-size:12px">Copyright &#169; The Regents of the University of California, Davis campus. All rights reserved.</div>
       </div>
       <div class="modal-footer">
-        <a class="btn btn-default pull-right" data-dismiss="modal">Close</a>
+        <a class="btn btn-default pull-right" data-dismiss="modal" >Close</a>
       </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
-<!-- /.modal -->
+</div><!-- /.modal -->
 
 
 <div class="modal fade" id="login-modal">
@@ -280,12 +280,12 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
           <a class="btn btn-danger" id="google-modal-login" style="margin-top: 20px">Sign in with Google</a> 
       </div>
       <div class="modal-footer">
-        <a class="btn btn-default pull-right" data-dismiss="modal">Close</a>
+        <a class="btn btn-default pull-right" data-dismiss="modal" >Close</a>
       </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
-<!-- /.modal -->
+</div><!-- /.modal -->
 
 <div class="modal fade" id="help-modal">
   <div class="modal-dialog">
@@ -301,12 +301,12 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
           <div style="padding:15px;text-align:center;color:#666;font-size:12px">Copyright &#169; The Regents of the University of California, Davis campus. All rights reserved.</div>
       </div>
       <div class="modal-footer">
-        <a class="btn btn-default pull-right" data-dismiss="modal">Close</a>
+        <a class="btn btn-default pull-right" data-dismiss="modal" >Close</a>
       </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
-<!-- /.modal -->
+</div><!-- /.modal -->
 
 
 <div class="modal fade" id="load-modal">
@@ -314,7 +314,7 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		    <img src="images/a8b428bf.gdrive_icon.png" style="height:24px;width:24px"> Load from Google Drive
+		    <img src="images/gdrive_icon.png" style="height:24px;width:24px" /> Load from Google Drive
       </div>
       <div class="modal-body">
         <div id="gdrive-file-msg"></div>
@@ -323,7 +323,7 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
      		</ul>
       </div>
       <div class="modal-footer">
-     	<a class="btn btn-default pull-right" data-dismiss="modal">Cancel</a>
+     	<a class="btn btn-default pull-right" data-dismiss="modal" >Cancel</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -334,13 +334,13 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <img src="images/a8b428bf.gdrive_icon.png" style="height:24px;width:24px"> Export CSV to Google Drive
+        <img src="images/gdrive_icon.png" style="height:24px;width:24px" /> Export CSV to Google Drive
       </div>
       <div class="modal-body">
         <div id="export-msg">
           <div id="export-msg-text"></div>
           <div id="export-msg-progress" class="progress progress-striped active">
-            <div id="export-msg-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+            <div id="export-msg-progress-bar" class="progress-bar"  role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
             </div>
           </div>
         </div>
@@ -356,7 +356,7 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
       </div>
       <div class="modal-footer">
         <a class="btn btn-primary pull-right" id="export-csv">Export</a>
-        <a class="btn btn-default pull-right" style="margin-right: 15px" data-dismiss="modal">Close</a>
+        <a class="btn btn-default pull-right" style="margin-right: 15px" data-dismiss="modal" >Close</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -376,7 +376,7 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
               <h3 class="panel-title">Local CSV File</h3>
             </div>
             <div class="panel-body" style="display:none" id="weatherReader-localfile-panel">
-              <input type="file" id="files" name="file" style="margin:auto" multiple="multiple">
+              <input type="file" id="files" name="file" style="margin:auto" multiple>
               <div style="margin:10px">- OR -</div>
               <div id="drop_zone">Drop files here</div>
               <div style="padding: 3px; color: #888; font-size: 12px">*Note: Dates should be in YYYY-MM format</div>
@@ -402,7 +402,7 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
 
       </div>
       <div class="modal-footer">
-        <a class="btn btn-default pull-right" style="margin-right: 15px" data-dismiss="modal">Close</a>
+        <a class="btn btn-default pull-right" style="margin-right: 15px" data-dismiss="modal" >Close</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

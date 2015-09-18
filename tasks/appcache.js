@@ -3,7 +3,7 @@
 
 module.exports = function(grunt) {
     // Load task
-    grunt.loadNpmTasks('grunt-contrib-appcache');
+    grunt.loadNpmTasks('grunt-appcache');
 
     // Options
     return {
@@ -18,15 +18,11 @@ module.exports = function(grunt) {
                 'dist/styles/*',
                 'dist/images/*',
                 'dist/*.png',
-                'dist/cache/*'
+                'dist/cache/*',
+                'dist/font/*',
             ],
             literals : [
-                'app.html',
-                'bower_components/requirejs/require.js',
-                'bower_components/font-awesome/css/font-awesome.min.css',
-                'bower_components/font-awesome/font/fontawesome-webfont.svg?v=3.2.1',
-                'bower_components/font-awesome/font/fontawesome-webfont.ttf?v=3.2.1',
-                'bower_components/font-awesome/font/fontawesome-webfont.woff?v=3.2.1',
+                'app.html'
             ]
           },
           network : [

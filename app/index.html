@@ -16,15 +16,18 @@
     <script src="http://192.168.1.128:8080/target/target-script-min.js"></script>
     -->
 
+    <!-- For cordova build
+    <script type="text/javascript" src="../cordova.js"></script>
+    -->
+
     <link rel="shortcut icon" sizes="196x196" href="logo_196.png">
     <link rel="shortcut icon" sizes="128x128" href="logo_128.png">
     <link rel="apple-touch-icon" sizes="128x128" href="logo_128.png">
     <link rel="apple-touch-icon-precomposed" sizes="128x128" href="logo_128.png">
 
-    <script type="text/javascript" src="../cordova.js"></script>
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<script src="https://apis.google.com/js/client.js"></script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
         var chartsLoaded = false;
         var chartsCallback = null;
@@ -39,25 +42,24 @@
               if( chartsCallback ) chartsCallback();
           });
         }
-
-
     </script>
 
-      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
 
-	   <!-- build:css({.tmp,app}) styles/main.css -->
+     <!-- build:css styles/build.css -->
      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-
+     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
 	   <link rel="stylesheet" type="text/css" href="styles/style.css" />
      <link rel="stylesheet" href="bower_components/owlcarousel/owl-carousel/owl.carousel.css">
      <link rel="stylesheet" href="bower_components/owlcarousel/owl-carousel/owl.theme.css">
      <!-- endbuild -->
 
+     <!-- build:js scripts/build.js -->
      <script src="bower_components/jquery/jquery.js"></script>
      <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
      <script src="bower_components/owlcarousel/owl-carousel/owl.carousel.js"></script>
      <script src="scripts/main.js"></script>
      <script src="scripts/app.js"></script>
+     <!-- endbuild -->
 
 </head>
 <body>

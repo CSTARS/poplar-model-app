@@ -3,7 +3,7 @@
 
 module.exports = function(grunt) {
     // Load task
-    grunt.loadNpmTasks('grunt-contrib-phonegap');
+    grunt.loadNpmTasks('grunt-phonegap');
 
     // Options
     return {

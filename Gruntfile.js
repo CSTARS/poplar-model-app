@@ -8,7 +8,7 @@
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
-  
+
     // Load the project's grunt tasks from a directory
     require('grunt-config-dir')(grunt, {
         configDir: require('path').resolve('tasks')
@@ -21,7 +21,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-filerev');
+
 
     grunt.config.merge({
         useminPrepare: {
@@ -32,27 +32,23 @@ module.exports = function (grunt) {
             }
         },
         usemin: {
-            html: ['app/index.html'],
+            html: ['dist/index.html'],
             options: {
-              assetsDirs: ['app']
+              assetsDirs: ['dist']
             }
-
         }
     });
 
 
     grunt.registerTask('build', [
         'clean:dist',
-        'useminPrepare',
         'copy:dist',
+        'useminPrepare',
+        'concat:generated',
+        'cssmin:generated',
+        'uglify:generated',
         'usemin',
         'appcache:all'
-
-        //,'copy:phonegap',
-        //'phonegap:build',
-        // if this is your first time building, you will need to run
-        // build again or icons will not show :/
-        //'copy:phonegapIcons'
     ]);
 
     grunt.registerTask('buildphone', [

@@ -11,27 +11,23 @@ module.exports = function(grunt) {
             files: [{
                 expand: true,
                 dot: true,
-                cwd: '<%= yeoman.app %>',
-                dest: '<%= yeoman.dist %>',
+                cwd: 'app',
+                dest: 'dist/',
                 src: [
-                    '*.{ico,png,txt}',
+                    '*.{ico,png,txt,html}',
                     '.htaccess',
                     'cache/*',
-                    'images/{,*/}*.{webp,gif}',
-                    'styles/fonts/{,*/}*.*',
-                    'bower_components/sass-bootstrap/fonts/*.*',
-                    'bower_components/font-awesome/css/*.*',
-                    'bower_components/font-awesome/font/*.*'
+                    'images/*.*',
+                ]
+            },{
+                expand: true,
+                dot: true,
+                cwd: 'app/bower_components/font-awesome/',
+                dest: 'dist/',
+                src: [
+                    'font/*.*'
                 ]
             }]
-        },
-        styles: {
-            expand: true,
-            cwd: '<%= yeoman.app %>',
-            dest: '.tmp/styles/',
-            src: [
-                    'styles/{,*/}*.css',
-                 ]
         },
         phonegap : {
             files: [{

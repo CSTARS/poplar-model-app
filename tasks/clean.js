@@ -7,17 +7,10 @@ module.exports = function(grunt) {
 
     // Options
     return {
-      dist: {
-        files: [{
-            dot: true,
-            src: [
-                '.tmp',
-                './phonegap/3pg-model/www/dist',
-                '<%= yeoman.dist %>/*',
-                '!<%= yeoman.dist %>/.git*'
-            ]
-        }]
-      },
-      server: '.tmp'
+      dist: [
+        '.tmp',
+        './phonegap/3pg-model/www/dist',
+        'dist'
+      ]
     };
 };
