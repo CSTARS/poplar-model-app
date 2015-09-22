@@ -355,29 +355,29 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
       }
   }
 
-  var cDate = new Date($("#input-manage-DatePlanted").val());
+  var cDate = new Date($("#input-manage-datePlanted").val());
 
   var data = [];
   var max = 0;
   // create the [][] array for the google chart
   for ( var i = 1; i < cData[0].output.length; i++) {
-      if (typeof cData[0].output[i][col] === 'string') continue;
+      //if (typeof cData[0].output[i][col] === 'string') continue;
 
       var row = [];
-      var date = new Date(cDate.getYear()+1900, cDate.getMonth()+i, cDate.getDate());
+
+      //var date = new Date(cDate.getYear()+1900, cDate.getMonth()+i, cDate.getDate());
       if( chartType == "timeline" ) {
           // add on month
-          row.push(date);
+          row.push(new Date(cData[0].output[i][0]));
       } else {
-          var m = date.getMonth()+1;
-          if( m < 10 ) m = '0'+m;
-          row.push(i+': '+date.getFullYear()+'-'+m);
+          row.push(cData[0].output[i][0]);
       }
 
       for ( var j = 0; j < cData.length; j++) {
           if( cData[j].output[i][col] > max ) max = cData[j].output[i][col];
           row.push(cData[j].output[i][col]);
       }
+
       data.push(row);
   }
 

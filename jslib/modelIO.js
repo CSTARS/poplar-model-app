@@ -10,14 +10,18 @@ module.exports = {
   read : function(model) {
     this.model = model;
 
+    model.debug = true;
+
     if( !model.plantation ) model.plantation = {};
     this.readAllConstants(model.plantation);
 
     if( !model.weather ) model.weather = {};
-    if( !model.plantingParams ) model.plantingParams = {};
+    if( !model.manage ) model.manage = {};
     if( !model.custom_weather ) model.custom_weather = {};
 
-    this.readWeather(model.weather, model.plantingParams, model.custom_weather);
+    this.readWeather(model.weather, model.manage, model.custom_weather);
+
+    delete this.model.manage.coppiceDates;
   },
   readAllConstants : function(plantation) {
       this.readFromInputs();
@@ -39,31 +43,32 @@ module.exports = {
           frac : 0.01
       };
   },
-  readWeather : function(weatherMap, plantingParams, customWeatherMap) {
-      var datePlanted = $("#input-manage-DatePlanted").val();
+
+  readWeather : function(weatherMap, manage, customWeatherMap) {
+      var datePlanted = $("#input-manage-datePlanted").val();
       if (datePlanted && datePlanted != "") {
-          plantingParams.datePlanted = new Date($("#input-manage-DatePlanted").val());
+          manage.datePlanted = new Date($("#input-manage-datePlanted").val());
       } else {
-          plantingParams.datePlanted = new Date();
+          manage.datePlanted = new Date();
       }
 
-      var dateCoppiced = $("#input-manage-DateCoppiced").val();
+      var dateCoppiced = $("#input-manage-dateCoppiced").val();
       if (dateCoppiced && dateCoppiced != "") {
-          plantingParams.dateCoppiced = new Date($("#input-manage-DateCoppiced").val());
+          manage.dateCoppiced = new Date($("#input-manage-dateCoppiced").val());
       } else {
          // set error condition : TODO
       }
 
-      var DateFinalHarvest = $("#input-manage-DateFinalHarvest").val();
+      var DateFinalHarvest = $("#input-manage-dateFinalHarvest").val();
       if (DateFinalHarvest && DateFinalHarvest != "") {
-          plantingParams.DateFinalHarvest = new Date($("#input-manage-DateFinalHarvest").val());
+          manage.DateFinalHarvest = new Date($("#input-manage-dateFinalHarvest").val());
       } else {
          // set error condition : TODO
       }
 
-      var yearsPerCoppice = $("#input-manage-CoppiceInterval").val();
+      var yearsPerCoppice = $("#input-manage-coppiceInterval").val();
       if (yearsPerCoppice && yearsPerCoppice != "") {
-          plantingParams.yearsPerCoppice = parseInt($("#input-manage-CoppiceInterval").val());
+          manage.yearsPerCoppice = parseInt($("#input-manage-coppiceInterval").val());
       }
 
 
@@ -71,13 +76,16 @@ module.exports = {
           var item = {
               month : (i + 1)
           };
+          var m = (i+1)+'';
+          if( m.length === 1 ) m = '0'+m;
+
           for ( var j = 1; j < this.app.inputs.weather.length; j++) {
               var c = this.app.inputs.weather[j];
-              item[c] = this._readVal($("#input-weather-" + c + "-" + i));
+              item[c] = this._readVal($("#input-weather-" + c + "-" + m));
           }
           item.nrel = item.rad / 0.0036;
 
-          weatherMap[i] = item;
+          weatherMap[m] = item;
       }
 
       if( this.model.custom_weather ) {
@@ -114,7 +122,7 @@ module.exports = {
   readFromInputs : function() {
       // read soil
       this.model.soil = {};
-      this.model.soil.maxAWS = this._readVal($("#input-soil-maxaws"));
+      this.model.soil.maxAWS = this._readVal($("#input-soil-maxAWS"));
       this.model.soil.swpower = this._readVal($("#input-soil-swpower"));
       this.model.soil.swconst = this._readVal($("#input-soil-swconst"));
 
@@ -171,7 +179,7 @@ module.exports = {
           plantation : this.model.plantation,
           manage : this.model.manage,
           soil : this.model.soil,
-          plantingParams : this.model.plantingParams,
+          manage : this.model.manage,
           plantation_state : this.model.plantation_state,
           config : {
               chartTypeInput : $("#chartTypeInput").val(),
@@ -262,29 +270,29 @@ module.exports = {
       // load planting params
       // Now part of manage....
       // fo
-      if (setup.plantingParams) {
+      if (setup.manage) {
           var map = {
               "datePlanted" : "DatePlanted",
               "dateCoppiced" : "DateCoppiced",
               "yearsPerCoppice" : "CoppiceInterval"
           }
 
-          for ( var key in setup.plantingParams) {
+          for ( var key in setup.manage) {
               var newKey = key;
               if( map[key] ) newKey = map[key];
 
-              if (typeof setup.plantingParams[key] == 'string')
-                  $("#input-manage-" + newKey).val(setup.plantingParams[key].replace(/T.*/, ''));
+              if (typeof setup.manage[key] == 'string')
+                  $("#input-manage-" + newKey).val(setup.manage[key].replace(/T.*/, ''));
               else
-                  $("#input-manage-" + newKey).val(setup.plantingParams[key]);
+                  $("#input-manage-" + newKey).val(setup.manage[key]);
           }
       }
 
       // this value is deprecated, set to new input
       if( setup.config.monthsToRun ) {
-          var d = new Date(setup.plantingParams.datePlanted);
+          var d = new Date(setup.manage.datePlanted);
           d = new Date(new Date(d).setMonth(d.getMonth()+parseInt(setup.config.monthsToRun)));
-          $("#input-manage-DateFinalHarvest").val(d.toISOString().replace(/T.*/, ''));
+          $("#input-manage-dateFinalHarvest").val(d.toISOString().replace(/T.*/, ''));
       }
 
 
@@ -293,7 +301,7 @@ module.exports = {
       for ( var i = 0; i < inputs.length; i++) {
           for ( var key in setup[inputs[i]]) {
               if (key == 'maxAWS') {
-                  $("#input-soil-maxaws").val(setup.soil.maxAWS);
+                  $("#input-soil-maxAWS").val(setup.soil.maxAWS);
               } else if ( typeof setup[inputs[i]][key] == 'string' && setup[inputs[i]][key].match(/.*T.*Z$/) ) {
                   $("#input-" + inputs[i] + "-" + key).val(setup[inputs[i]][key].replace(/T.*/, ''));
               } else {

@@ -5,15 +5,17 @@ var exporter = require('./export');
 var offline = require('./offline');
 
 // import model stuff
-var model = require('poplar-3pg-model');
+var model = require('../../poplar-3pg-model');
 var modelIO = require('./modelIO');
 model.setIO(modelIO);
+
+var daily = true;
 
 var runCallback = null;
 var _3pgModel = null;
 
 var inputs = {
-	weather : ["month","tmin","tmax","tdmean","ppt","rad","daylight"]
+  weather : ["month","tmin","tmax","tdmean","ppt","rad","daylight"]
 };
 var outputs = ["VPD","fVPD","fT","fFrost","PAR","xPP","Intcptn","ASW","CumIrrig",
            "Irrig","StandAge","LAI","CanCond","Transp","fSW","fAge",
@@ -36,6 +38,8 @@ var getOutputs = function() {
   return outputs;
 }
 
+
+
 var outputDefinitions = require('./outputDefinitions');
 
 
@@ -46,14 +50,14 @@ function qs(key) {
 }
 
 var init = function(callback) {
-	inputForm = require('./inputForm')(this);
-	charts = require('./charts');
-	charts.setApp(this);
+  inputForm = require('./inputForm')(this);
+  charts = require('./charts');
+  charts.setApp(this);
 
-	modelIO.app = this;
-	modelIO.model = model;
-	modelIO.charts = charts;
-	modelIO.inputForm = inputForm;
+  modelIO.app = this;
+  modelIO.model = model;
+  modelIO.charts = charts;
+  modelIO.inputForm = inputForm;
 
   // check if flash is installed.  If not, hide the chart type toggle.
   require('./flashBlock-detector')(function(val){
@@ -77,9 +81,9 @@ var init = function(callback) {
   charts.init();
 
   // set default config
-  $("#input-manage-DatePlanted").val(new Date().toISOString().replace(/T.*/,''));
-  $("#input-manage-DateCoppiced").val(new Date(new Date().getTime()+(86400000*2*365)).toISOString().replace(/T.*/,''));
-  $("#input-manage-DateFinalHarvest").val(new Date(new Date().getTime()+(86400000*10*365)).toISOString().replace(/T.*/,''));
+  $("#input-manage-datePlanted").val(new Date().toISOString().replace(/T.*/,''));
+  $("#input-manage-dateCoppiced").val(new Date(new Date().getTime()+(86400000*2*365)).toISOString().replace(/T.*/,''));
+  $("#input-manage-dateFinalHarvest").val(new Date(new Date().getTime()+(86400000*10*365)).toISOString().replace(/T.*/,''));
 
   // setup nice scrolling
   $('.app-nav').on('click', function(e) {
@@ -105,19 +109,19 @@ var runComplete = function(rows) {
   if ( runCallback ) runCallback(rows);
   if( hideInitLoading ) hideInitLoading();
   runCallback = null;
-}
+};
 
 var monthsToRun = function() {
-  var d1 = $("#input-manage-DatePlanted").val();
-  if (d1 && d1 != "") {
-      d1 = new Date($("#input-manage-DatePlanted").val());
+  var d1 = $("#input-manage-datePlanted").val();
+  if (d1 && d1 !== "") {
+      d1 = new Date($("#input-manage-datePlanted").val());
   } else {
       d1 = new Date();
   }
 
-  var d2 = $("#input-manage-DateFinalHarvest").val();
-  if (d2 && d2 != "") {
-      d2 = new Date($("#input-manage-DateFinalHarvest").val());
+  var d2 = $("#input-manage-dateFinalHarvest").val();
+  if (d2 && d2 !== "") {
+      d2 = new Date($("#input-manage-dateFinalHarvest").val());
   } else {
       d2 = new Date();
   }
@@ -163,13 +167,18 @@ var runModel = function(isRt) {
       $("#variationAnalysisStatus").html("<b>"+(params.length == 0 ? "None" : params.join(", "))+"</b>");
 
       // we are only running once
-      if ( params.length == 0 ) {
+      if ( params.length === 0 ) {
           ga('send', 'event', 'ui', 'interaction', 'model-run-singleParam', 1);
 
           runCallback = function(rows) {
               showResults(rows);
-          }
-          model.run(monthsToRun());
+          };
+
+          model.dailyStep = daily;
+          var months = monthsToRun();
+          if( daily ) months = months * 30;
+
+          model.run(months);
 
       } else {
           ga('send', 'event', 'ui', 'interaction', 'model-run-variation', 1);
@@ -180,7 +189,7 @@ var runModel = function(isRt) {
               var obj = {
                   inputs : {},
                   output : null
-              }
+              };
               obj.inputs[params[0]] = model.variations[params[0]][i];
               if( params.length > 1 ) {
                   for( var j = 0; j < model.variations[params[1]].length; j++ ) {
@@ -218,25 +227,30 @@ var runVariation = function(index, runs) {
       } else {
           runVariation(index, runs);
       }
-  }
+  };
 
-  model.run(monthsToRun());
-}
+  var months = monthsToRun();
+  if( daily ) months = months * 30;
+
+  model.run(months);
+};
 
 
 var showResults = function(result) {
+  var currentResults;
   if( result[0] instanceof Array ) {
-      result = [{
+      currentResults = [{
           singleRun : true,
           inputs : {},
           output : result
       }]
+  } else {
+    currentResults = result;
   }
 
-  currentResults = result;
 
-  showRawOutput(result);
-  charts.updateCharts(result, true);
+  showRawOutput(currentResults);
+  charts.updateCharts(currentResults, true);
 
   setTimeout(function() {
       $("#runbtn, #runbtn-sm").removeClass("disabled").html("<i class='icon-play'></i> Run");
@@ -247,9 +261,9 @@ var showResults = function(result) {
 // make sure all the weather is set.  #1 thing people will mess up
 var checkWeather = function() {
   // first get current months we are going to run,
-  var start = $("#input-manage-DatePlanted").val();
+  var start = $("#input-manage-datePlanted").val();
 
-  var end = $("#input-manage-DateFinalHarvest").val().split("-");
+  var end = $("#input-manage-dateFinalHarvest").val().split("-");
   var eMonth = parseInt(end[1]);
   var eYear = parseInt(end[0]);
 
@@ -283,11 +297,14 @@ var checkWeather = function() {
 
   // if not make sure we have averages selected
   for ( var i = 0; i < 12; i++) {
+    var m = (i+1)+'';
+    if( m.length == 1 ) m = '0'+m;
+
       for ( var j = 1; j < inputs.weather.length; j++) {
           var c = inputs.weather[j];
-          var val = parseFloat($("#input-weather-" + c + "-" + i).val());
+          var val = parseFloat($("#input-weather-" + c + "-" + m).val());
           if( !val && val != 0 ) {
-              alert("Missing weather data: "+c+" for month "+i+"\n\n"+
+              alert("Missing weather data: "+c+" for month "+m+"\n\n"+
                     "Did you select a location (Setup) and/or are all weather/soil fields filled out?");
               $("#runbtn, #runbtn-sm").removeClass("disabled").html("<i class='icon-play'></i> Run");
               return false;
@@ -403,15 +420,15 @@ var showRawOutput = function(results) {
 
   // some rows have strings, we don't want these
   // ignore string rows
-  for( var i = 0; i < results.length; i++ ) {
+  /*for( var i = 0; i < results.length; i++ ) {
       var clean = [results[i].output[0]];
       for( var j = 1; j < results[i].output.length; j++ ) {
           if( typeof results[i].output[j][0] != 'string' ) clean.push(results[i].output[j]);
       }
       results[i].output = clean;
-  }
+  }*/
 
-  var cDate = new Date($("#input-manage-DatePlanted").val());
+  var cDate = new Date($("#input-manage-datePlanted").val());
 
   var table, row;
   for( var key in chartRows ) {
@@ -427,7 +444,7 @@ var showRawOutput = function(results) {
               csvResults.data[key][j].push('month');
               csvResults.data[key][j].push('date');
 
-              table += "<tr><th>Month</th><th>Date</th>";
+              table += "<tr><th>Step</th><th>Date</th>";
               for( var z = 0; z < results.length; z++ ) {
                   table += "<th>";
                   var tmp = [];
@@ -448,14 +465,14 @@ var showRawOutput = function(results) {
 
               table += "</tr>";
           } else {
-              var date = new Date(cDate.getYear()+1900, cDate.getMonth()+j, cDate.getDate());
-              var m = date.getMonth()+1;
-              if( m < 10 ) m = '0'+m;
+              //var date = new Date(cDate.getYear()+1900, cDate.getMonth()+j, cDate.getDate());
+              //var m = date.getMonth()+1;
+              //if( m < 10 ) m = '0'+m;
 
-              table += "<tr><td>"+j+"</td><td>"+date.getFullYear()+'-'+m+"</td>";
+              table += "<tr><td>"+j+"</td><td>"+results[0].output[j][0]+'</td>';
 
               csvResults.data[key][j].push(j);
-              csvResults.data[key][j].push(date.getFullYear()+'-'+m);
+              csvResults.data[key][j].push(results[0].output[j][0]);
 
               var v;
               for( var z = 0; z < results.length; z++ ) {
@@ -477,17 +494,17 @@ var showRawOutput = function(results) {
 module.exports = {
   init : init,
   outputs : outputs,
-	inputs : inputs,
+  inputs : inputs,
   getModel : getModel,
   runModel : runModel,
   showRawOutput : showRawOutput,
-	monthsToRun : monthsToRun,
+  monthsToRun : monthsToRun,
   outputDefinitions : outputDefinitions,
   qs : qs,
   setWeather : setWeather,
-	gdrive : gdrive,
-	runComplete : runComplete,
-	getModelIO : function() {
-		return modelIO;
-	}
+  gdrive : gdrive,
+  runComplete : runComplete,
+  getModelIO : function() {
+    return modelIO;
+  }
 };

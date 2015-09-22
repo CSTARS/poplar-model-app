@@ -123,12 +123,15 @@ function _createWeatherInputs() {
   table += "</tr>";
 
   for( var i = 0; i < 12; i++ ) {
+    var m = (i+1)+'';
+    if( m.length == 1 ) m = '0'+m;
+
     table += "<tr>";
     for( var j = 0; j < cols.length; j++ ) {
       if( j == 0 ) {
         table += "<td>"+(i+1)+"</td>";
       } else {
-        table += "<td><input class='form-control' id='input-weather-"+cols[j]+"-"+i+"' type='text' /></td>";
+        table += "<td><input class='form-control' id='input-weather-"+cols[j]+"-"+m+"' type='text' /></td>";
       }
     }
     table += "</tr>";
@@ -166,10 +169,12 @@ function _queryWeatherData(lng, lat, callback) {
     var table = JSON.parse(response.getDataTable().toJSON());
 
     for( var i = 0; i < table.rows.length; i++ ) {
-      var m = i+'';
+      var m = (i+1)+'';
+      if( m.length == 1 ) m = '0'+m;
+
       weatherAverageChartData[m] = {};
       for( var j = 1; j < table.cols.length; j++ ) {
-        $("#input-weather-"+cols[j]+"-"+i).val(table.rows[i].c[j] ? table.rows[i].c[j].v : "");
+        $("#input-weather-"+cols[j]+"-"+m).val(table.rows[i].c[j] ? table.rows[i].c[j].v : "");
       }
     }
 
@@ -189,7 +194,11 @@ function _queryWeatherData(lng, lat, callback) {
         alert("Invalid location selected");
         break;
       }
-      $("#input-soil-"+table.cols[i].id).val(table.rows[0].c[i].v);
+
+      var key = table.cols[i].id;
+      if( key === 'maxaws' ) key = 'maxAWS';
+
+      $("#input-soil-"+key).val(table.rows[0].c[i].v);
     }
 
     if( !error ) checkDone();
@@ -203,11 +212,14 @@ function updateAverageChart() {
   weatherAverageChartData = {};
 
   for( var i = 0; i < 12; i++ ) {
-    weatherAverageChartData[i+''] = {};
+    var m = (i+1)+'';
+    if( m.length == 1 ) m = '0'+m;
+
+    weatherAverageChartData[m] = {};
     for( var j = 1; j < cols.length; j++ ) {
-      var val = $("#input-weather-"+cols[j]+"-"+i).val();
-      if( val && val.length > 0 ) weatherAverageChartData[i+''][cols[j]] = parseInt(val);
-      else weatherAverageChartData[i+''][cols[j]] = 0;
+      var val = $("#input-weather-"+cols[j]+"-"+m).val();
+      if( val && val.length > 0 ) weatherAverageChartData[m][cols[j]] = parseInt(val);
+      else weatherAverageChartData[m][cols[j]] = 0;
     }
   }
   weatherAverageChart = charts.createWeatherChart($('#average-weather-chart')[0], weatherAverageChartData);
