@@ -9,7 +9,7 @@ var model = require('../../poplar-3pg-model');
 var modelIO = require('./modelIO');
 model.setIO(modelIO);
 
-var daily = true;
+var daily = false;
 
 var runCallback = null;
 var _3pgModel = null;
@@ -60,7 +60,7 @@ var init = function(callback) {
   modelIO.inputForm = inputForm;
 
   // check if flash is installed.  If not, hide the chart type toggle.
-  require('./flashBlock-detector')(function(val){
+  require('./flashblock-detector')(function(val){
       if( val > 0 ) $("#chart-type-btn-group").hide();
   });
 
