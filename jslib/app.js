@@ -9,7 +9,7 @@ var model = require('../../poplar-3pg-model');
 var modelIO = require('./modelIO');
 model.setIO(modelIO);
 
-var daily = false;
+var daily = true;
 
 var runCallback = null;
 var _3pgModel = null;
@@ -178,7 +178,13 @@ var runModel = function(isRt) {
           var months = monthsToRun();
           if( daily ) months = months * 30;
 
-          model.run(months);
+          try {
+            model.run(months);
+          } catch(e) {
+            debugger;
+            alert(e);
+          }
+
 
       } else {
           ga('send', 'event', 'ui', 'interaction', 'model-run-variation', 1);
@@ -218,6 +224,7 @@ var runVariation = function(index, runs) {
       runs[index].output = data;
       index++;
 
+
       if (runs.length == index) {
           // reset the constant to the first value
           for( var key in model.variations ) {
@@ -232,7 +239,13 @@ var runVariation = function(index, runs) {
   var months = monthsToRun();
   if( daily ) months = months * 30;
 
-  model.run(months);
+  try {
+    model.run(months);
+  } catch(e) {
+    debugger;
+    alert(e);
+  }
+
 };
 
 

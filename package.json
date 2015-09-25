@@ -2,7 +2,6 @@
   "name": "yeoman",
   "version": "0.0.0",
   "dependencies": {
-    "poplar-3pg-model": "git+ssh://git@github.com/CSTARS/poplar-3pg-model.git#n-step"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
