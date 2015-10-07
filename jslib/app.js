@@ -9,7 +9,7 @@ var model = require('../../poplar-3pg-model');
 var modelIO = require('./modelIO');
 model.setIO(modelIO);
 
-var daily = true;
+var daily = false;
 
 var runCallback = null;
 var _3pgModel = null;
@@ -17,9 +17,9 @@ var _3pgModel = null;
 var inputs = {
   weather : ["month","tmin","tmax","tdmean","ppt","rad","daylight"]
 };
-var outputs = ["VPD","fVPD","fT","fFrost","PAR","xPP","Intcptn","ASW","CumIrrig",
-           "Irrig","StandAge","LAI","CanCond","Transp","fSW","fAge",
-           "PhysMod","pR","pS","litterfall","NPP","WF","WR","WS","W"];
+var outputs = ["VPD","fVPD","fT","fFrost","PAR","Intcptn","ASW","CumIrrig",
+               "Irrig","StandAge","LAI","CanCond","Transp","ETr","Kc","fSW","fAge",
+               "PhysMod","pR","pS","litterfall","NPP","WF","WR","WS","W"];
 var debug = false;
 var devmode = false;
 
