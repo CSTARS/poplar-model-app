@@ -1,7 +1,8 @@
 var offline = require('./offline');
-var gdrive = require('./gdrive');
+var gdrive = require('./googleDrive');
 var charts = require('./charts');
-var weatherFileReader = require('./weatherFileReader');
+var weatherChart = require('./weather/chart');
+var weatherFileReader = require('./weather/fileReader');
 
 module.exports = function(app) {
 
@@ -222,7 +223,7 @@ function updateAverageChart() {
       else weatherAverageChartData[m][cols[j]] = 0;
     }
   }
-  weatherAverageChart = charts.createWeatherChart($('#average-weather-chart')[0], weatherAverageChartData);
+  weatherAverageChart = weatherChart.create($('#average-weather-chart')[0], weatherAverageChartData);
 }
 
 function _selectWeatherLocation() {
@@ -499,7 +500,7 @@ function create(ele) {
 
   $(window).on('resize', function(){
     if( weatherAverageChart ){
-      weatherAverageChart = charts.createWeatherChart($('#average-weather-chart')[0], weatherAverageChartData);
+      weatherAverageChart = weatherChart.create($('#average-weather-chart')[0], weatherAverageChartData);
     }
   });
 

@@ -1,3 +1,6 @@
+var outputDefinitions = require('./output/definitions');
+var raw = require('./output/raw');
+var config = require('./config');
 var app;
 
 // only draw charts if width has changed
@@ -12,29 +15,6 @@ var googleChartColors = ["#3366cc","#dc3912","#ff9900","#109618","#990099","#009
                       "#5574a6","#3b3eac","#b77322","#16d620","#b91383","#f4359e",
                       "#9c5935","#a9c413","#2a778d","#668d1c","#bea413","#0c5922"
                       ,"#743411"];
-
-var weatherChartOptions = {
-  title : 'Weather',
-  height : 300,
-  vAxes: [{
-          title: "Radiation (MJ/day); Temperature (^C); Dew Point (^C); Daylight (h)",
-          minValue : -5,
-          maxValue : 35
-        },{
-          title: "Precipitation (mm)",
-          minValue : -50,
-          maxValue : 350
-        }],
-  hAxis: {title: "Month"},
-  seriesType: "bars",
-  series: {
-      0: {type: "line", targetAxisIndex:0},
-      1: {type: "line", targetAxisIndex:0},
-      2: {type: "line", targetAxisIndex:0},
-      3: {type: "area", targetAxisIndex:1},
-      4: {targetAxisIndex:0}
-  }
-}
 
 // template for the popup
 var sliderPopup = $(
@@ -71,8 +51,8 @@ function init() {
 
   var c1 = $("#chartSelections-c1");
   var c2 = $("#chartSelections-c2");
-  for( var i = 0; i < app.outputs.length; i++) {
-      var val = app.outputs[i];
+  for( var i = 0; i < config.outputs.length; i++) {
+      var val = config.outputs[i];
       chartTypeSelector.append($("<option value='" + val + "' "
               + (val == 'WR' || val == 'WS' || val == 'WF' ? 'selected' : '')
               + ">" + val + "</option>"));
@@ -108,7 +88,7 @@ function init() {
           setTimeout(function(){
               updateCharts();
               // update raw data as well
-              app.showRawOutput(cData);
+              raw.show(cData);
           },400);
 
       }
@@ -125,9 +105,9 @@ function init() {
 
 // make sure and end label tag
 function _createDescription(val) {
-  if( !app.outputDefinitions[val] ) return "<b>"+val+"</b></label>";
+  if( !outputDefinitions[val] ) return "<b>"+val+"</b></label>";
 
-  var desc = app.outputDefinitions[val];
+  var desc = outputDefinitions[val];
   var label = desc.label && desc.label.length > 0 ? " - "+desc.label : "";
   var units = desc.units && desc.units.length > 0 ? " ["+desc.units+"]" : "";
 
@@ -167,11 +147,11 @@ function unselect(val) {
 }
 
 function selectAll() {
-  for( var i = 0; i < app.outputs.length; i++) select(app.outputs[i]);
+  for( var i = 0; i < config.outputs.length; i++) select(config.outputs[i]);
 }
 
 function unselectAll() {
-  for( var i = 0; i < app.outputs.length; i++) unselect(app.outputs[i]);
+  for( var i = 0; i < config.outputs.length; i++) unselect(config.outputs[i]);
 }
 
 function remove(ele) {
@@ -383,8 +363,8 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
 
   dt.addRows(data);
 
-  if( app.outputDefinitions[type] ) {
-      var desc = app.outputDefinitions[type];
+  if( outputDefinitions[type] ) {
+      var desc = outputDefinitions[type];
       var label = desc.label && desc.label.length > 0 ? " - "+desc.label : "";
       var units = desc.units && desc.units.length > 0 ? " ["+desc.units+"]" : "";
       type = type+label+units;
@@ -420,38 +400,6 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
   }
 }
 
-function createWeatherChart(root, data) {
-  $(root).html('');
-
-  var dt = new google.visualization.DataTable();
-  dt.addColumn('string', 'Month');
-  dt.addColumn('number', 'Min Temperature');
-  dt.addColumn('number', 'Max Temperature');
-  dt.addColumn('number', 'Dew Point');
-  dt.addColumn('number', 'Precipitation');
-  dt.addColumn('number', 'Radiation');
-  dt.addColumn('number', 'Daylight');
-
-  for( var date in data ) {
-      var obj = data[date];
-      dt.addRow([
-          date+'',
-          obj.tmin || 0,
-          obj.tmax || 0,
-          obj.tdmean || 0,
-          obj.ppt || 0,
-          obj.rad || 0,
-          obj.daylight || 0
-      ]);
-  }
-
-  var chart = new google.visualization.ComboChart(root);
-  chart.draw(dt, weatherChartOptions);
-
-  return chart;
-}
-
-
 module.exports = {
   setApp : function(a) {
     app = a;
@@ -466,6 +414,5 @@ module.exports = {
     remove : remove,
     showPopup: showPopup,
     hidePopup: hidePopup,
-    resize : resize,
-    createWeatherChart : createWeatherChart
-}
+    resize : resize
+};

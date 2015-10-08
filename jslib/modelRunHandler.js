@@ -1,3 +1,6 @@
+var config = require('./config');
+var app = require('./app');
+
 // Special Sauce...
 // basically the code loaded from GitHub expects the following to exists in the window scope
 //   m3PGIO
@@ -79,8 +82,8 @@ module.exports = {
           var m = (i+1)+'';
           if( m.length === 1 ) m = '0'+m;
 
-          for ( var j = 1; j < this.app.inputs.weather.length; j++) {
-              var c = this.app.inputs.weather[j];
+          for ( var j = 1; j < config.inputs.weather.length; j++) {
+              var c = config.inputs.weather[j];
               item[c] = this._readVal($("#input-weather-" + c + "-" + m));
           }
           item.nrel = item.rad / 0.0036;
@@ -95,10 +98,6 @@ module.exports = {
           }
       }
       return weatherMap;
-  },
-  dump : function(rows, sheet) {
-      // set the raw output
-      this.app.runComplete(rows);
   },
 
   // read a value from the input
@@ -117,6 +116,10 @@ module.exports = {
           return this.model.variations[id][0];
       }
       return parseFloat(val);
+  },
+
+  dump : function(data) {
+    // should be overwritten in app
   },
 
   readFromInputs : function() {
@@ -167,6 +170,8 @@ module.exports = {
       }
 
   },
+
+  // this is the snapshot we save to google drive
   exportSetup : function() {
       this.model.variations = {};
       this.readFromInputs();
@@ -243,14 +248,26 @@ module.exports = {
             }
         }
       } else {
+        var incIndex = false, index;
+        if( setup.weather[0] !== undefined || setup.weather['0'] !== undefined ) {
+          incIndex = true;
+        }
+
         for ( var i in setup.weather ) {
             for ( var key in setup.weather[i]) {
-                if (key == 'month')
-                    continue;
-                if (setup.weather[i][key] != null)
-                    $("#input-weather-" + key + "-" + i).val(setup.weather[i][key])
-                else
-                    $("#input-weather-" + key + "-" + i).val("");
+                if (key == 'month') continue;
+
+
+                if( incIndex ) index = (parseInt(i)+1)+'';
+                else index = i+'';
+
+                if( index.length === 1 ) index = '0'+index;
+
+                if (setup.weather[i][key] !== null) {
+                    $("#input-weather-" + key + "-" + index).val(setup.weather[i][key])
+                } else {
+                    $("#input-weather-" + key + "-" + index).val("");
+                }
             }
         }
       }
@@ -290,7 +307,7 @@ module.exports = {
 
       // this value is deprecated, set to new input
       if( setup.config.monthsToRun ) {
-          var d = new Date(setup.manage.datePlanted);
+          var d = new Date(setup.manage.datePlanted || setup.manage.DatePlanted);
           d = new Date(new Date(d).setMonth(d.getMonth()+parseInt(setup.config.monthsToRun)));
           $("#input-manage-dateFinalHarvest").val(d.toISOString().replace(/T.*/, ''));
       }

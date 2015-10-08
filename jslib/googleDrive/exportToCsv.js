@@ -1,16 +1,20 @@
-var gdrive = require('./gdrive');
+/*
+ * Save to google drive (export as CSV)
+ */
+
+var gdrive = require('./index');
 
 function init() {
   $("#export-modal").modal({
-          show : false
-      });
+    show : false
+  });
 
-      $("#show-export-csv").on('click', function(){
-        _setMessage(null);
+  $("#show-export-csv").on('click', function(){
+    _setMessage(null);
 
-        $("#export-name").val("3PG Model Results ("+new Date().toISOString().replace(/T/,' ').replace(/\.\d*Z/,'')+")");
-          $("#export-modal").modal('show');
-      });
+    $("#export-name").val("3PG Model Results ("+new Date().toISOString().replace(/T/,' ').replace(/\.\d*Z/,'')+")");
+    $("#export-modal").modal('show');
+  });
 }
 
 function _setMessage(msg, type, progress) {
@@ -49,14 +53,14 @@ function _checkError(file) {
 }
 
   // export as csv
-function exportCsv(results) {
+function run(results) {
   ga('send', 'event', 'ui', 'interaction', 'export-drive-csv', 1);
 
   $("#export-csv").addClass("disabled").html("Exporting...");
 
   var name = $("#export-name").val();
-  if( name.length == 0 ) {
-    _setMessage("Please provide a folder name", "danger")
+  if( name.length === 0 ) {
+    _setMessage("Please provide a folder name", "danger");
     $("#export-csv").removeClass("disabled").html("Export");
     return;
   }
@@ -104,7 +108,7 @@ function _createExport(index, keys, data, parent) {
     // TODO: add month and date
 
     for( var i = 0; i < data[key].length; i++ ) {
-      if( data[key][i].length == 0 ) continue; // ignore the blank rows
+      if( data[key][i].length === 0 ) continue; // ignore the blank rows
 
       for( var j = 0; j < data[key][i].length; j++ ) csv += data[key][i][j]+",";
       csv = csv.replace(/,$/,'')+"\n";
@@ -120,9 +124,9 @@ function _createExport(index, keys, data, parent) {
       _createExport(index, keys, data, parent);
     },{convert: true, parent: parent});
   }
-};
+}
 
 module.exports = {
-  exportCsv : exportCsv,
-  init      : init
+  run : run,
+  init : init
 };

@@ -34,7 +34,7 @@ function onChartsLoaded() {
         if( offlineMode ) {
             offline.render();
         } else {
-            PoplarApp.gdrive.init(PoplarApp, function(){
+            PoplarApp.googleDrive.init(function(){
                 var file = PoplarApp.qs("file");
                 if( file ) {
                     PoplarApp.gdrive.load(file, initLoading);

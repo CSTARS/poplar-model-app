@@ -1,4 +1,4 @@
-var app = require('./app');
+var app = require('../app');
 
 // add spreadsheet viz source
 // https://spreadsheets.google.com/tq?tq=select%20*&key=0Av7cUV-o2QQYdHZFYWJNNWpRS1hIVWhGQThlLWZwZWc&usp=drive_web#gid=0

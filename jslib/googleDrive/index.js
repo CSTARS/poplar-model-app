@@ -1,5 +1,6 @@
-var Oauth = require('./oauth');
-var gdriveRT = require('./gdriveRT');
+var Oauth = require('../oauth');
+var gdriveRT = require('./realtime');
+var modelIO = require('../modelRunHandler');
 var app;
 
 
@@ -25,13 +26,15 @@ var treeList = [];
 // current MIME TYPE we are saving
 var saveMimeType = "";
 
+function setApp(a) {
+  app = a;
+  gdriveRT.setApp(app);
+}
+
 /***
  *  Initialize google drive panels, btns and login
  ***/
-function init(application, callback) {
-  app = application;
-  gdriveRT.setApp(app);
-
+function init(callback) {
   // init bootstrap modal
   $("#save-modal").modal({
     show : false
@@ -123,9 +126,9 @@ function _saveNewFile() {
 
   // see what kind of file we are creating based on the saveMimeType var
   if( saveMimeType == MIME_TYPE ) {
-    data = app.getModelIO().exportSetup();
+    data = modelIO.exportSetup();
   } else if ( saveMimeType == TREE_MIME_TYPE ) {
-    data = app.getModelIO().exportSetup().tree;
+    data = modelIO.exportSetup().tree;
   } else { // badness
     alert("Unknown MIME_TYPE: "+saveMimeType);
     return;
@@ -190,10 +193,10 @@ function _updateCurrentFile() {
   // grab the corrent data and fileid based on mimeType
   if( saveMimeType == MIME_TYPE ) {
     file = loadedFile;
-    data = app.getModelIO().exportSetup();
+    data = modelIO.exportSetup();
   } else if ( saveMimeType == TREE_MIME_TYPE ) {
     file = loadedTree;
-    data = app.getModelIO().exportSetup().tree;
+    data = modelIO.exportSetup().tree;
   } else { // badness
     alert("Unknown MIME_TYPE: "+saveMimeType);
     return;
@@ -527,7 +530,7 @@ function _showDriveFiles() {
       $("#open-in-drive").attr("href","https://docs.google.com/file/d/"+id).parent().show();
 
       // setup model
-      app.getModelIO().loadSetup(id, file);
+      modelIO.loadSetup(id, file);
 
       // setup realtime events
       gdriveRT.initRtApi(loadedFile);
@@ -593,7 +596,7 @@ function _showTreeFiles() {
       loadedTree = id;
 
       // loaded tree into model / UI
-      app.getModelIO().loadTree(file);
+      modelIO.loadTree(file);
 
       // wait a sec so user can see success message
       setTimeout(function(){
@@ -735,7 +738,7 @@ function _onInitFileLoaded(metadata, file) {
     $("#loaded-model-title").html("<span style='color:#333'>Loaded Model </span> "+metadata.title);
 
     // setup model
-    app.getModelIO().loadSetup(metadata.id, file);
+    modelIO.loadSetup(metadata.id, file);
 
     // setup realtime events
     gdriveRT.initRtApi(loadedFile);
@@ -748,7 +751,7 @@ function _onInitFileLoaded(metadata, file) {
     $("#loaded-tree-name").html(metadata.title).parent().show();
 
     // set the loaded tree
-    app.getModelIO().loadTree(file);
+    modelIO.loadTree(file);
 
     // hide the loading popup
     if( hideInitLoading ) hideInitLoading();
@@ -996,6 +999,7 @@ module.exports = {
   showLoadTreePanel : showLoadTreePanel,
   showSaveTreePanel : showSaveTreePanel,
   runModelRt : runModelRt,
+  setApp : setApp,
 
   MIME_TYPE : MIME_TYPE
-}
+};
