@@ -18,9 +18,9 @@ var _3pgModel = null;
 var inputs = {
   weather : ["month","tmin","tmax","tdmean","ppt","rad","daylight"]
 };
-var outputs = ["VPD","fVPD","fT","fFrost","PAR","xPP","Intcptn","ASW","CumIrrig",
-           "Irrig","StandAge","LAI","CanCond","Transp","fSW","fAge",
-           "PhysMod","pR","pS","litterfall","NPP","WF","WR","WS","W"];
+var outputs = ["VPD","fVPD","fT","fFrost","PAR","Intcptn","ASW","CumIrrig",
+               "Irrig","StandAge","LAI","CanCond","Transp","ETr","Kc","fSW","fAge",
+               "PhysMod","pR","pS","litterfall","NPP","WF","WR","WS","W"];
 var debug = false;
 var devmode = false;
 
@@ -179,7 +179,13 @@ var runModel = function(isRt) {
           var months = monthsToRun();
           if( daily ) months = months * 30;
 
-          model.run(months);
+          try {
+            model.run(months);
+          } catch(e) {
+            debugger;
+            alert(e);
+          }
+
 
       } else {
           ga('send', 'event', 'ui', 'interaction', 'model-run-variation', 1);
@@ -219,6 +225,7 @@ var runVariation = function(index, runs) {
       runs[index].output = data;
       index++;
 
+
       if (runs.length == index) {
           // reset the constant to the first value
           for( var key in model.variations ) {
@@ -233,7 +240,13 @@ var runVariation = function(index, runs) {
   var months = monthsToRun();
   if( daily ) months = months * 30;
 
-  model.run(months);
+  try {
+    model.run(months);
+  } catch(e) {
+    debugger;
+    alert(e);
+  }
+
 };
 
 

@@ -71,6 +71,16 @@ module.exports = {
       units : "mm/mon",
       description : "Water movement through a plant and its evaporation from aerial parts"
   },
+  ETr : {
+      label : "ETr",
+      units : "mm",
+      description : "Reference evapotranspiration for Alfalfa"
+  },
+  Kc : {
+      label : "Kc",
+      units : "",
+      description : "Crop coefficients"
+  },
   fSW : {
       label : "Soil Water Modifier",
       units : "unitless",

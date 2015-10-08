@@ -64,7 +64,7 @@ var ARRAY_INPUT_TEMPLATE =
   '</div></div>';
 
 var tabHeader = '<ul class="nav nav-pills" id="input_pills">';
-var content = '<div class="pill-content">';
+var content = '<div class="tab-content">';
 
 var treeHeader = '<div class="panel-group" id="tree-accordion">';
 var TREE_PANEL_TEMPLATE = '<div class="panel panel-default">'+
@@ -412,7 +412,7 @@ function create(ele) {
                 +model.substr(0,1).toUpperCase()+model.substr(1).toLowerCase()+'</a></li>';
     var attributes = inputs[model];
 
-    content += ' <div class="pill-pane" id="inputs_'+model+'">';
+    content += ' <div class="tab-pane fade" id="inputs_'+model+'">';
 
     var row1 = "";
     var row2 = "<div class='col-lg-6>";
@@ -469,7 +469,7 @@ function create(ele) {
   });
 
   // set pill click handlers
-  $('#input_tabs a').click(function (e) {
+  $('#input_pills a').click(function (e) {
       e.preventDefault()
       $(this).tab('show')
   });
