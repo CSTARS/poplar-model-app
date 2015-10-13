@@ -101,7 +101,7 @@ var runComplete = function(rows) {
 };
 modelIO.dump = runComplete;
 
-var daysToRun = function() {
+var daysToRun = function(days_in_interval) {
   var d1 = $("#input-manage-datePlanted").val();
   if (d1 && d1 !== "") {
       d1 = new Date($("#input-manage-datePlanted").val());
@@ -118,7 +118,9 @@ var daysToRun = function() {
 
   var oneDay = 24*60*60*1000;
   var days = Math.round(Math.abs((d1.getTime() - d2.getTime())/(oneDay)));
-  return days <= 0 ? 1 : days;
+  days = days <= 0 ? 1 : days;
+
+  return days / days_in_interval;
 };
 
 
@@ -163,7 +165,7 @@ var runModel = function(isRt) {
           };
 
 
-          var days = daysToRun();
+          var days = daysToRun(model.setup.days_in_interval);
 
           try {
             model.run(days);
@@ -226,7 +228,7 @@ var runVariation = function(index, runs) {
       }
   };
 
-  var days = daysToRun();
+  var days = daysToRun(parseFloat($('#input-setup-days_in_interval').val()));
 
   try {
     model.run(days);
@@ -249,11 +251,11 @@ var showResults = function(result) {
     currentResults = result;
   }
 
-
   // transpose all results to hash by date
   for( var i = 0; i < currentResults.length; i++ ) {
     var dateHash = {};
     var r = currentResults[i];
+
     r.totalSteps = r.output.length;
     for( var j = 1; j < r.output.length; j++ ) {
       dateHash[r.output[j][0]] = r.output[j];
