@@ -86,9 +86,7 @@ function init() {
       $("#chart-modal").modal('hide');
       if( changes && cData ) {
           setTimeout(function(){
-              updateCharts();
-              // update raw data as well
-              raw.show(cData);
+            app.updateUi();
           },400);
 
       }
@@ -363,9 +361,94 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
 
   dt.addRows(data);*/
 
+  var data = cData.data[type];
 
+  if( chartType == 'timeline' ) {
+    var newData = [$.extend(true,[], data[0])];
 
-  var dt = google.visualization.arrayToDataTable(cData.data[type]);
+    var len = data.length; len2 = data[0].length;
+
+    for( var i = 1; i < len; i++ ) {
+      var row = [];
+      for( var j = 0; j < len2; j++ ) {
+        if( j === 0 ) {
+          row.push(new Date(data[i][j]));
+        } else {
+          row.push(data[i][j]);
+        }
+      }
+      newData.push(row);
+    }
+    data = newData;
+
+  } else if( config.spread.indexOf(type) > -1 && cData.inputs.length > 0 && cData.inputs[0]['setup.days_in_interval'] ) {
+    var maxInterval = cData.inputs[0]['setup.days_in_interval'];
+    for( var i = 1; i < cData.inputs.length; i++ ) {
+      var t = cData.inputs[i]['setup.days_in_interval'];
+      if( maxInterval < t ) maxInterval = t;
+    }
+
+    var adjustment = [];
+    for( var i = 0; i < cData.inputs.length; i++ ) {
+      adjustment.push(maxInterval / cData.inputs[i]['setup.days_in_interval']);
+    }
+
+    var len = data.length, len2 = data[0].length, row, use;
+    var newData = [$.extend(true,[], data[0])];
+
+    for( var i = 1; i < len; i++ ) {
+      row = [], use = true;
+      for( var j = 0; j < len2; j++ ) {
+        if( data[i][j] === null ) {
+          use = false;
+          break;
+        }
+
+        if( j === 0 ) {
+          row.push(data[i][j]);
+        } else {
+          row.push(data[i][j] * adjustment[j-1]);
+        }
+      }
+
+      if( use ) {
+        newData.push(row);
+      }
+    }
+
+    data = newData;
+  }
+
+  // lets try and optimize
+  if( data.length > 500 ) {
+    var hasNulls = false
+    if( cData.inputs.length > 0 && cData.inputs[0]['setup.days_in_interval'] ) {
+      hasNulls = true;
+    }
+
+    var c = 0;
+    for( var i = data.length-1; i > 0 ; i-- ) {
+      if( hasNulls ) {
+        var isNull = false;
+        for( var j = 0; j < data[i].length; j++ ) {
+          if( data[i][j] === null ) {
+            isNull = true;
+            break;
+          }
+        }
+        if( isNull ) {
+          if( c % 4 != 0 ) data.splice(i, 1);
+          c++;
+        }
+      } else {
+        if( c % 4 != 0 ) data.splice(i, 1);
+        c++;
+      }
+
+    }
+  }
+
+  var dt = google.visualization.arrayToDataTable(data);
 
 
   if( outputDefinitions[type] ) {

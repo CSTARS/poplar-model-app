@@ -24,6 +24,7 @@ var runCallback, weatherCustomChart;
 // being displayed.  Go ahead an setup the csv data at this point, then if the user
 // decides to export, we are all set to to;
 var csvResults = null;
+var currentResults = null;
 
 
 var init = function(callback) {
@@ -228,6 +229,7 @@ var runVariation = function(index, runs) {
       }
   };
 
+  // HACK: when should we look this up?
   var days = daysToRun(parseFloat($('#input-setup-days_in_interval').val()));
 
   try {
@@ -240,7 +242,6 @@ var runVariation = function(index, runs) {
 
 
 var showResults = function(result) {
-  var currentResults;
   if( result[0] instanceof Array ) {
       currentResults = [{
           singleRun : true,
@@ -266,28 +267,38 @@ var showResults = function(result) {
 
   // sort by most to least steps
   currentResults.sort(function(a, b){
-    if( a.totalSteps > b.totalSteps ) return 1;
-    if( a.totalSteps < b.totalSteps ) return -1;
+    if( a.totalSteps > b.totalSteps ) return -1;
+    if( a.totalSteps < b.totalSteps ) return 1;
     return 0;
   });
 
-  rawOutput.show(currentResults);
-  charts.updateCharts(csvResults, true);
+  updateUi();
 
   setTimeout(function() {
       $("#runbtn, #runbtn-sm").removeClass("disabled").html("<i class='icon-play'></i> Run");
   }, 250);
 };
 
+function updateUi() {
+  if( !currentResults ) return;
+
+  rawOutput.show(currentResults); // this updates csvResults
+  charts.updateCharts(csvResults, true);
+}
+
 module.exports = {
   init : init,
   googleDrive : gdrive,
   getModel : getModel,
   runModel : runModel,
+  updateUi : updateUi,
   daysToRun : daysToRun,
   // the raw module actually creates this setup
   setCsvResults : function(csv) {
     csvResults = csv;
+  },
+  getCsvResults : function() {
+    return csvResults;
   },
   qs : utils.qs,
   getModelIO : function() {

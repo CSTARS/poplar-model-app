@@ -7,5 +7,9 @@ module.exports = {
              'PhysMod','pR','pS','litterfall','xPP','NPP','WF','WR','WS','W'],
   debug : false,
   devmode : false,
-  daily : true
+  // these variables, when run with multiple different time steps, will draw
+  // aggregate values to greatest step.
+  // Ex: 1 and 30 days given.  Will chart every 30 days with value of every 30th
+  // day multiplied by 30 for the daily step run.
+  spread : ['xPP', 'NPP', 'PAR','Irrig', 'Transp','ETr','litterfall'],
 };

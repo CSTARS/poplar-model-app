@@ -1,4 +1,5 @@
 var modelIO = require('../modelRunHandler');
+var config = require('../config');
 var app;
 
 var show = function(results) {
