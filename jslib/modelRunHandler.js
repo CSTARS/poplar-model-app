@@ -129,6 +129,10 @@ module.exports = {
       this.model.soil.swpower = this._readVal($("#input-soil-swpower"));
       this.model.soil.swconst = this._readVal($("#input-soil-swconst"));
 
+      this.model.setup = {
+        days_in_interval : this._readVal($("#input-setup-days_in_interval"))
+      };
+
       // read manage
       this.model.manage = {
           coppice : false
@@ -180,6 +184,7 @@ module.exports = {
       var ex = {
           weather : this.model.weather,
           custom_weather : this.model.custom_weather,
+          setup : this.model.setup,
           tree : this.model.tree,
           plantation : this.model.plantation,
           manage : this.model.manage,
@@ -188,7 +193,7 @@ module.exports = {
           plantation_state : this.model.plantation_state,
           config : {
               chartTypeInput : $("#chartTypeInput").val(),
-              monthsToRun : this.app.monthsToRun(),
+              daysToRun : this.app.daysToRun(),
               currentLocation : $("#current-location").html(),
               loadedTree : $("#loaded-tree-name").html(),
               version : this.app.qs("version") ? this.app.qs("version") : "master"
@@ -233,6 +238,10 @@ module.exports = {
       }
       if( setup.config.loadedTree ) {
           $("#loaded-tree-name").html(setup.config.loadedTree).parent().show();
+      }
+
+      if( setup.setup && setup.setup.days_in_interval ) {
+        $('#input-setup-days_in_interval').val(setup.setup.days_in_interval);
       }
 
       // load weather
@@ -306,9 +315,9 @@ module.exports = {
       }
 
       // this value is deprecated, set to new input
-      if( setup.config.monthsToRun ) {
+      if( setup.config.daysToRun ) {
           var d = new Date(setup.manage.datePlanted || setup.manage.DatePlanted);
-          d = new Date(new Date(d).setMonth(d.getMonth()+parseInt(setup.config.monthsToRun)));
+          d = new Date(new Date(d).setMonth(d.getMonth()+parseInt(setup.config.daysToRun)));
           $("#input-manage-dateFinalHarvest").val(d.toISOString().replace(/T.*/, ''));
       }
 

@@ -24,12 +24,22 @@ var SETUP_TEMPLATE =
           '</tr>'+
       '</table>'+
   '</div>'+
-  '<h4>Location</h4>'+
+  '<h4>Time Step</h4>'+
+   '<div style="border-top:1px solid #ddd;padding:8px;height:60px">'+
+     '<div class="form-group">'+
+       '<label for="input-setup-days_in_interval" class="col-lg-4 control-label">Days in Interval</label>'+
+       '<div class="col-lg-8">'+
+         '<input type="text" id="input-setup-days_in_interval"  class="form-control" value="1"/>'+
+         '<p class="help-block">How many days are in each step of the model</p>' +
+       '</div>'+
+     '</div>'+
+   '</div>'+
+   '<h4>Location</h4>'+
    '<div style="border-top:1px solid #ddd;padding:8px;height:60px">'+
      '<span id="current-location" style="color:#888"></span>'+
      '<a class="btn btn-default pull-right select-weather-location"><i class="icon-map-marker"></i> Select Location</a>'+
-     '</div>'+
-     '<div>';
+    '</div>'+
+  '</div>';
 
 var GOOLEDRIVE_TREE_TEMPLATE =
   '<div style="padding:15px 0 5px 0;margin-bottom:5px;height: 50px">'+

@@ -101,7 +101,7 @@ var runComplete = function(rows) {
 };
 modelIO.dump = runComplete;
 
-var monthsToRun = function() {
+var daysToRun = function() {
   var d1 = $("#input-manage-datePlanted").val();
   if (d1 && d1 !== "") {
       d1 = new Date($("#input-manage-datePlanted").val());
@@ -116,11 +116,9 @@ var monthsToRun = function() {
       d2 = new Date();
   }
 
-  var months;
-  months = (d2.getFullYear() - d1.getFullYear()) * 12;
-  months -= d1.getMonth() + 1;
-  months += d2.getMonth();
-  return months <= 0 ? 1 : months+1;
+  var oneDay = 24*60*60*1000;
+  var days = Math.round(Math.abs((d1.getTime() - d2.getTime())/(oneDay)));
+  return days <= 0 ? 1 : days;
 };
 
 
@@ -164,12 +162,11 @@ var runModel = function(isRt) {
               showResults(rows);
           };
 
-          model.dailyStep = config.daily;
-          var months = monthsToRun();
-          if( config.daily ) months = months * 30;
+
+          var days = daysToRun();
 
           try {
-            model.run(months);
+            model.run(days);
           } catch(e) {
             debugger;
             alert(e);
@@ -206,6 +203,7 @@ var runModel = function(isRt) {
 // run a single variation, when multiple inputs for a single parameter have
 // been given
 var runVariation = function(index, runs) {
+
   // set input variables for run
   var run = runs[index];
   for( var key in run.inputs ) {
@@ -228,11 +226,10 @@ var runVariation = function(index, runs) {
       }
   };
 
-  var months = monthsToRun();
-  if( config.daily ) months = months * 30;
+  var days = daysToRun();
 
   try {
-    model.run(months);
+    model.run(days);
   } catch(e) {
     debugger;
     alert(e);
@@ -253,8 +250,27 @@ var showResults = function(result) {
   }
 
 
+  // transpose all results to hash by date
+  for( var i = 0; i < currentResults.length; i++ ) {
+    var dateHash = {};
+    var r = currentResults[i];
+    r.totalSteps = r.output.length;
+    for( var j = 1; j < r.output.length; j++ ) {
+      dateHash[r.output[j][0]] = r.output[j];
+    }
+    r.header = r.output[0];
+    r.output = dateHash;
+  }
+
+  // sort by most to least steps
+  currentResults.sort(function(a, b){
+    if( a.totalSteps > b.totalSteps ) return 1;
+    if( a.totalSteps < b.totalSteps ) return -1;
+    return 0;
+  });
+
   rawOutput.show(currentResults);
-  charts.updateCharts(currentResults, true);
+  charts.updateCharts(csvResults, true);
 
   setTimeout(function() {
       $("#runbtn, #runbtn-sm").removeClass("disabled").html("<i class='icon-play'></i> Run");
@@ -266,7 +282,7 @@ module.exports = {
   googleDrive : gdrive,
   getModel : getModel,
   runModel : runModel,
-  monthsToRun : monthsToRun,
+  daysToRun : daysToRun,
   // the raw module actually creates this setup
   setCsvResults : function(csv) {
     csvResults = csv;

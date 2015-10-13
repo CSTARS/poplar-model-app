@@ -668,6 +668,7 @@ function showSaveTreePanel() {
  ***/
 var loginModalInit = false;
 function load(id, loadFn) {
+
   // if we don't have an access token, we need to sign in first
   // TODO: if this is a public file, there is no reason to sign in... solution?
   if( !token ) {

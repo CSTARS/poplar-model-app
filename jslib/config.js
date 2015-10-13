@@ -4,8 +4,8 @@ module.exports = {
   },
   outputs : ['VPD','fVPD','fT','fFrost','PAR','Intcptn','ASW','CumIrrig',
              'Irrig','StandAge','LAI','CanCond','Transp','ETr','Kc','fSW','fAge',
-             'PhysMod','pR','pS','litterfall','NPP','WF','WR','WS','W'],
+             'PhysMod','pR','pS','litterfall','xPP','NPP','WF','WR','WS','W'],
   debug : false,
   devmode : false,
-  daily : false
+  daily : true
 };

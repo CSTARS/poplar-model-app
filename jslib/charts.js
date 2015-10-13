@@ -210,13 +210,13 @@ function updateCharts(results, animate) {
 
   // create a legend if there is more than one run
   var legend = "";
-  if( !cData[0].singleRun ) {
+  if( cData.inputs.length > 1 ) {
       var c1 = "";
       var c2 = "";
-      for( var i = 0; i < cData.length; i++ ) {
+      for( var i = 0; i < cData.inputs.length; i++ ) {
           var ele = "<div style='min-height:40px;margin-bottom:10px'><div class='legend-square' style='background-color:"+googleChartColors[i]+"'>&nbsp;</div>";
-          for( var mType in cData[i].inputs ) {
-              ele += "<div class='legend-text'>"+mType+"="+cData[i].inputs[mType]+"</div>";
+          for( var mType in cData.inputs[i] ) {
+              ele += "<div class='legend-text'>"+mType+"="+cData.inputs[i][mType]+"</div>";
           }
 
           if( i % 2 == 0 ) c1 += ele + "</div>"
@@ -304,7 +304,7 @@ function _showPopupChart(type) {
 function _createChart(type, chartType, panel, showLegend, size, animate) {
   var col = 0;
 
-  var dt = new google.visualization.DataTable();
+  /*var dt = new google.visualization.DataTable();
 
   if( chartType == 'timeline' ) {
       dt.addColumn('date', 'Month');
@@ -333,9 +333,9 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
           col = i;
           break;
       }
-  }
+  }*/
 
-  var cDate = new Date($("#input-manage-datePlanted").val());
+  /*var cDate = new Date($("#input-manage-datePlanted").val());
 
   var data = [];
   var max = 0;
@@ -361,7 +361,12 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
       data.push(row);
   }
 
-  dt.addRows(data);
+  dt.addRows(data);*/
+
+
+
+  var dt = google.visualization.arrayToDataTable(cData.data[type]);
+
 
   if( outputDefinitions[type] ) {
       var desc = outputDefinitions[type];
@@ -372,13 +377,14 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
 
 
   var options = {
-          vAxis : {
-              title : type
-          },
-          hAxis : {
-              title : "Month"
-          }
-  }
+      vAxis : {
+          title : type
+      },
+      hAxis : {
+          title : ""
+      },
+      interpolateNulls : true
+  };
   if( !showLegend ) options.legend = {position:"none"};
 
   if( size ) {

@@ -37,14 +37,14 @@ function onChartsLoaded() {
             PoplarApp.googleDrive.init(function(){
                 var file = PoplarApp.qs("file");
                 if( file ) {
-                    PoplarApp.gdrive.load(file, initLoading);
+                    PoplarApp.googleDrive.load(file, initLoading);
                 }
                 // see if we are loading for google drive
                 var state = PoplarApp.qs("state");
                 if( state ) {
                     state = JSON.parse(state);
                     initLoading();
-                    PoplarApp.gdrive.load(state.ids[0], initLoading);
+                    PoplarApp.googleDrive.load(state.ids[0], initLoading);
                 }
             });
         }
