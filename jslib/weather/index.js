@@ -1,7 +1,9 @@
 var config = require('../config');
+var chart = require('./chart');
 
 // make sure all the weather is set.  #1 thing people will mess up
 function check(model) {
+
   // first get current months we are going to run,
   var start = $("#input-manage-datePlanted").val();
 
@@ -125,7 +127,7 @@ function set(model, data) {
   $('#custom-weather-panel').html(html+'</table></div><div id="custom-weather-chart"></div>');
 
   setTimeout(function(){
-      weatherCustomChart = charts.createWeatherChart($('#custom-weather-chart')[0], model.custom_weather);
+      weatherCustomChart = chart.create($('#custom-weather-chart')[0], model.custom_weather);
   }, 1000);
 }
 

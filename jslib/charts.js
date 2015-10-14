@@ -6,6 +6,8 @@ var app;
 // only draw charts if width has changed
 var cWidth = 0;
 
+var charts = [];
+
 // there is no way to get the colors for the legends (to make your own)
 // this post:
 // gives these values.  This is a HACK, if they ever change, we need to update
@@ -196,13 +198,16 @@ function resize() {
   if( resizeTimer != -1 ) clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
       resizeTimer = -1;
-      updateCharts();
+
+      redrawCharts();
   },300);
 }
 
 function updateCharts(results, animate) {
   if( results ) setData(results);
   if( !cData ) return;
+
+  charts = [];
 
   $("#show-chartspopup-btn").show();
 
@@ -261,6 +266,10 @@ function showPopup() {
       paginationSpeed : 400,
       singleItem:true
   });
+
+  setTimeout(function(){
+    redrawCharts();
+  }, 200);
 }
 
 function hidePopup() {
@@ -272,7 +281,7 @@ function hidePopup() {
 function _showMainChart(type, animate) {
   var chartType = $(".chart-type-toggle.active").attr("value");
   var panel = $("<div />");
-  var outerPanel = $("<div>"+
+  var outerPanel = $("<div style='margin-bottom: 25px'>"+
   	"<a class='btn btn-xs btn-default' style='"+(chartType != "timeline" ? "position:absolute;z-index:10;margin:0 0 -20px 20px" : "margin-bottom:5px")+
       "' type='"+type+"'>" +
   	"<i class='icon-remove'></i> "+type+"</a></div>");
@@ -302,65 +311,6 @@ function _showPopupChart(type) {
 function _createChart(type, chartType, panel, showLegend, size, animate) {
   var col = 0;
 
-  /*var dt = new google.visualization.DataTable();
-
-  if( chartType == 'timeline' ) {
-      dt.addColumn('date', 'Month');
-  } else {
-      //dt.addColumn('number', 'Month');
-      dt.addColumn('string', 'Month');
-  }
-
-  // set the first column
-  if( !cData[0].singleRun ) {
-      for( var i = 0; i < cData.length; i++ ) {
-          var label = "";
-          for( var key in cData[i].inputs ) {
-              label += key.replace(/.*\./,'')+"="+cData[i].inputs[key]+" \n";
-          }
-          label = label.replace(/,\s$/,'');
-          dt.addColumn('number', label);
-      }
-  } else {
-      dt.addColumn('number', type);
-  }
-
-  // find the column we want to chart
-  for ( var i = 0; i < cData[0].output[0].length; i++) {
-      if (cData[0].output[0][i] == type) {
-          col = i;
-          break;
-      }
-  }*/
-
-  /*var cDate = new Date($("#input-manage-datePlanted").val());
-
-  var data = [];
-  var max = 0;
-  // create the [][] array for the google chart
-  for ( var i = 1; i < cData[0].output.length; i++) {
-      //if (typeof cData[0].output[i][col] === 'string') continue;
-
-      var row = [];
-
-      //var date = new Date(cDate.getYear()+1900, cDate.getMonth()+i, cDate.getDate());
-      if( chartType == "timeline" ) {
-          // add on month
-          row.push(new Date(cData[0].output[i][0]));
-      } else {
-          row.push(cData[0].output[i][0]);
-      }
-
-      for ( var j = 0; j < cData.length; j++) {
-          if( cData[j].output[i][col] > max ) max = cData[j].output[i][col];
-          row.push(cData[j].output[i][col]);
-      }
-
-      data.push(row);
-  }
-
-  dt.addRows(data);*/
-
   var data = cData.data[type];
 
   if( chartType == 'timeline' ) {
@@ -381,7 +331,10 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
     }
     data = newData;
 
-  } else if( config.spread.indexOf(type) > -1 && cData.inputs.length > 0 && cData.inputs[0]['setup.days_in_interval'] ) {
+  }
+
+  // do we need to fake some of the data to fit?  or skip because we have too much?
+  if( config.spread.indexOf(type) > -1 && cData.inputs.length > 0 && cData.inputs[0]['setup.days_in_interval'] ) {
     var maxInterval = cData.inputs[0]['setup.days_in_interval'];
     for( var i = 1; i < cData.inputs.length; i++ ) {
       var t = cData.inputs[i]['setup.days_in_interval'];
@@ -471,21 +424,38 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
   if( !showLegend ) options.legend = {position:"none"};
 
   if( size ) {
-      options.width = size[0];
+      //options.width = size[0];
       options.height = size[1];
   } else {
-      options.width = panel.width();
-      options.height = options.width*.4;
+      //options.width = panel.width();
+      //options.height = options.width*.4;
+      options.height = panel.width()*.4;
   }
-  panel.width(options.width).height(options.height);
+  //panel.width(options.width).height(options.height);
+  panel.height(options.height);
 
+  var chart;
   if( chartType == 'timeline' ) {
       options.displayAnnotations = true;
-      var chart = new google.visualization.AnnotatedTimeLine(panel[0]);
+      chart = new google.visualization.AnnotatedTimeLine(panel[0]);
       chart.draw(dt, options);
   } else {
-      var chart = new google.visualization.LineChart(panel[0]);
+      chart = new google.visualization.LineChart(panel[0]);
       chart.draw(dt, options);
+      //chart = new google.charts.Line(panel[0]);
+      //chart.draw(dt, google.charts.Line.convertOptions(options));
+  }
+
+  charts.push({
+    dt : dt,
+    chart : chart,
+    options : options
+  });
+}
+
+function redrawCharts() {
+  for( var i = 0; i < charts.length; i++ ) {
+    charts[i].chart.draw(charts[i].dt, charts[i].options);
   }
 }
 

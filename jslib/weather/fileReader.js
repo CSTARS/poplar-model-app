@@ -1,14 +1,17 @@
-var app = require('../app');
+var weather = require('./index');
+var app;
 
 // add spreadsheet viz source
 // https://spreadsheets.google.com/tq?tq=select%20*&key=0Av7cUV-o2QQYdHZFYWJNNWpRS1hIVWhGQThlLWZwZWc&usp=drive_web#gid=0
 
-function init() {
-var dropZone = document.getElementById('drop_zone');
-dropZone.addEventListener('dragover', _handleDragOver, false);
-dropZone.addEventListener('drop', _handleFileSelect, false);
+function init(a) {
+  app = a;
 
-document.getElementById('files').addEventListener('change', _handleFileSelect, false);
+  var dropZone = document.getElementById('drop_zone');
+  dropZone.addEventListener('dragover', _handleDragOver, false);
+  dropZone.addEventListener('drop', _handleFileSelect, false);
+
+  document.getElementById('files').addEventListener('change', _handleFileSelect, false);
 
     $('#spreadsheet-weather-input-btn').on('click', function(){
         _handleGoogleSpreadsheet();
@@ -194,7 +197,7 @@ var WeatherFile = function() {
         });
 
         ele.find('.btn-success').on('click', function(){
-            app.setWeather(data);
+            weather.set(app.getModel(), data);
             ele.remove();
             _onComplete();
         });

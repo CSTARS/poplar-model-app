@@ -377,6 +377,27 @@ The Advanced Hardwood Biofuels Northwest project, AHB-NW investigates using popl
         <i class="icon-upload-alt"></i> Upload Weather Data
       </div>
       <div class="modal-body">
+        <div class="help-block">Upload your own weather data.  Weather data can be averages or actual data for a given date.<br /><br />
+
+          <div>Your sheet should have the following headers:</div>
+          <ul>
+            <li>date [formats below in order of priority]</li>
+              <ul>
+                <li><b>YYYY-MM-DD</b>: Actual daily</li>
+                <li><b>MM-DD</b>: Modeled daily</li>
+                <li><b>YYYY-MM</b>: Monthly average</li>
+                <li><b>MM</b>: Modeled monthly</li>
+              </ul>
+            <li>tmin (Min Temperature) [c]</li>
+            <li>tmax (Max Temperature) [c]</li>
+            <li>tdmean (Dew Point Temperature) [C]</li>
+            <li>ppt (Precipition) [mm]</li>
+            <li>rad (Solar Radiation) [MJ/day]</li>
+            <li>daylight (Daylight Hours) [h]</li>
+          </ul>
+        </div>
+
+
         <div class="drop-zone-container">
           <div class="panel panel-default">
             <div class="panel-heading" style="cursor:pointer" id="weatherReader-localfile">

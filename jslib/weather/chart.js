@@ -33,9 +33,11 @@ function create(root, data) {
   dt.addColumn('number', 'Radiation');
   dt.addColumn('number', 'Daylight');
 
+  var rows = [];
   for( var date in data ) {
       var obj = data[date];
-      dt.addRow([
+      rows.push([
+          parseInt(date.replace(/-/g, '')),
           date+'',
           obj.tmin || 0,
           obj.tmax || 0,
@@ -45,6 +47,18 @@ function create(root, data) {
           obj.daylight || 0
       ]);
   }
+
+  rows.sort(function(a, b){
+    if( a[0] > b[0] ) return 1;
+    if( a[0] < b[0] ) return -1;
+    return 0;
+  });
+  // remove sort value
+  for( var i = 0; i < rows.length; i++ ) {
+    rows[i].splice(0, 1);
+  }
+
+  dt.addRows(rows);
 
   var chart = new google.visualization.ComboChart(root);
   chart.draw(dt, options);

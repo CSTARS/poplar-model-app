@@ -1,6 +1,7 @@
 var offline = require('./offline');
 var gdrive = require('./googleDrive');
 var charts = require('./charts');
+var weather = require('./weather');
 var weatherChart = require('./weather/chart');
 var weatherFileReader = require('./weather/fileReader');
 
@@ -24,8 +25,8 @@ var SETUP_TEMPLATE =
           '</tr>'+
       '</table>'+
   '</div>'+
-  '<h4>Time Step</h4>'+
-   '<div style="border-top:1px solid #ddd;padding:8px;height:60px">'+
+  '<h4 class="page-header">Time Step</h4>'+
+   '<div class="form-horizontal">'+
      '<div class="form-group">'+
        '<label for="input-setup-days_in_interval" class="col-lg-4 control-label">Days in Interval</label>'+
        '<div class="col-lg-8">'+
@@ -34,8 +35,8 @@ var SETUP_TEMPLATE =
        '</div>'+
      '</div>'+
    '</div>'+
-   '<h4>Location</h4>'+
-   '<div style="border-top:1px solid #ddd;padding:8px;height:60px">'+
+   '<h4 class="page-header">Location</h4>'+
+   '<div>'+
      '<span id="current-location" style="color:#888"></span>'+
      '<a class="btn btn-default pull-right select-weather-location"><i class="icon-map-marker"></i> Select Location</a>'+
     '</div>'+
@@ -387,7 +388,7 @@ function _generateInputs(i, type, prefix, name, attrs) {
 }
 
 function create(ele) {
-  weatherFileReader.init();
+  weatherFileReader.init(app);
   var model, m, attr, config;
 
   var inputs = $.extend(true, {}, app.getModel().getDataModel());
@@ -502,7 +503,7 @@ function create(ele) {
       $('#average-weather-panel').show();
       $('#custom-weather-panel').hide();
     } else {
-      app.setWeather();
+      weather.set(app.getModel());
       $('#average-weather-panel').hide();
       $('#custom-weather-panel').show();
     }
