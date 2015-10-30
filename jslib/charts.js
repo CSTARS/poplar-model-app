@@ -336,6 +336,7 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
   // do we need to fake some of the data to fit?  or skip because we have too much?
   if( config.spread.indexOf(type) > -1 && cData.inputs.length > 0 && cData.inputs[0]['setup.days_in_interval'] ) {
     var maxInterval = cData.inputs[0]['setup.days_in_interval'];
+
     for( var i = 1; i < cData.inputs.length; i++ ) {
       var t = cData.inputs[i]['setup.days_in_interval'];
       if( maxInterval < t ) maxInterval = t;
@@ -373,15 +374,19 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
   }
 
   // lets try and optimize
+  /*var olength = data.length;
+
   if( data.length > 500 ) {
-    var hasNulls = false
+    var hasNulls = false;
     if( cData.inputs.length > 0 && cData.inputs[0]['setup.days_in_interval'] ) {
       hasNulls = true;
     }
 
     var c = 0;
     for( var i = data.length-1; i > 0 ; i-- ) {
+
       if( hasNulls ) {
+
         var isNull = false;
         for( var j = 0; j < data[i].length; j++ ) {
           if( data[i][j] === null ) {
@@ -389,10 +394,12 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
             break;
           }
         }
+
         if( isNull ) {
           if( c % 4 != 0 ) data.splice(i, 1);
           c++;
         }
+
       } else {
         if( c % 4 != 0 ) data.splice(i, 1);
         c++;
@@ -400,6 +407,7 @@ function _createChart(type, chartType, panel, showLegend, size, animate) {
 
     }
   }
+  console.log(type+'  '+olength+' -> '+data.length);*/
 
   var dt = google.visualization.arrayToDataTable(data);
 
