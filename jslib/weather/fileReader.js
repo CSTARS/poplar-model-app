@@ -155,7 +155,7 @@ var WeatherFile = function() {
     ele.find('.filename').html(getName(file));
     rootEle.append(ele);
 
-        _setHandlers();
+    _setHandlers();
   }
 
     function initFromUrl(url, rootEle) {
@@ -392,6 +392,7 @@ var WeatherFile = function() {
   // set the map of csv headers
   function setData() {
         data = {};
+
         for( var i = 1; i < csvTable.length; i++ ) {
             if( csvTable[i].length < 7 ) continue; // bad row
 

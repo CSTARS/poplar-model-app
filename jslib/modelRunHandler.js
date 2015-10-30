@@ -20,9 +20,8 @@ module.exports = {
 
     if( !model.weather ) model.weather = {};
     if( !model.manage ) model.manage = {};
-    if( !model.custom_weather ) model.custom_weather = {};
 
-    this.readWeather(model.weather, model.manage, model.custom_weather);
+    this.readWeather(model.weather, model.manage);
 
     delete this.model.manage.coppiceDates;
   },
@@ -47,7 +46,7 @@ module.exports = {
       };
   },
 
-  readWeather : function(weatherMap, manage, customWeatherMap) {
+  readWeather : function(weatherMap, manage) {
       var datePlanted = $("#input-manage-datePlanted").val();
       if (datePlanted && datePlanted != "") {
           manage.datePlanted = new Date($("#input-manage-datePlanted").val());
@@ -76,6 +75,7 @@ module.exports = {
 
 
       for ( var i = 0; i < 12; i++) {
+          var valid = true;
           var item = {
               month : (i + 1)
           };
@@ -85,10 +85,16 @@ module.exports = {
           for ( var j = 1; j < config.inputs.weather.length; j++) {
               var c = config.inputs.weather[j];
               item[c] = this._readVal($("#input-weather-" + c + "-" + m));
-          }
-          item.nrel = item.rad / 0.0036;
 
-          weatherMap[m] = item;
+              if( isNaN(item[c]) ) {
+                valid = false;
+                break;
+              }
+          }
+          if( valid ) {
+            item.nrel = item.rad / 0.0036;
+            weatherMap[m] = item;
+          }
       }
 
       if( this.model.custom_weather ) {

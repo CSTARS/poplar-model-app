@@ -11,13 +11,13 @@ function check(model) {
   var eMonth = parseInt(end[1]);
   var eYear = parseInt(end[0]);
 
-  var cDate = new Date(start);
+  /*var cDate = new Date(start);
 
   // now see if we have custom weather coverage
   var hasCoverage = true;
   var count = 0;
   while( count < 10000 ) {
-      if( !model.custom_weather ) {
+      if( !model.weather ) {
           hasCoverage = false;
           break;
       }
@@ -37,10 +37,10 @@ function check(model) {
       count++;
   }
 
-  if( hasCoverage ) return true;
+  if( hasCoverage ) return true;*/
 
   // if not make sure we have averages selected
-  for ( var i = 0; i < 12; i++) {
+  /*for ( var i = 0; i < 12; i++) {
     var m = (i+1)+'';
     if( m.length == 1 ) m = '0'+m;
 
@@ -54,42 +54,49 @@ function check(model) {
               return false;
           }
       }
-  }
+  }*/
 
   return true;
 }
 
 function set(model, data) {
-  if( !model.custom_weather ) model.custom_weather = {};
+  if( !model.weather ) model.weather = {};
 
   if( data ) {
       for( var key in data ) {
 
           // clean up date format
-          var date = key.replace(/[^\d-]/,'');
-          var parts = date.split('-');
+          //var date = key.replace(/[^\d-]/,'');
+          var parts = key.split('-');
+          for( var i = 0; i < parts.length; i++ ) {
+            if( parts[i].length == 1 ) {
+              parts[i] = '0'+parts[i];
+            }
+          }
+          var date = parts.join('-');
 
-          if( parts.length < 2 ) {
+
+          /*if( parts.length < 2 ) {
               return alert('Invalid Date Format.  Dates should be in YYYY-MM format');
           }
           if ( parts[1].length != 2 ) {
               date = parts[0]+"-0"+parts[1];
-          }
+          }*/
 
-          model.custom_weather[date] = data[key];
+          model.weather[date] = data[key];
       }
   }
 
   // create array so we can sort
   var arr = [];
   var headers = ['date'];
-  for( var date in model.custom_weather ) {
+  for( var date in model.weather ) {
 
       var t = [date];
-      for( var key in model.custom_weather[date] ) {
+      for( var key in model.weather[date] ) {
           if( key == 'nrel' ) continue;
           if( arr.length === 0 ) headers.push(key);
-          t.push(model.custom_weather[date][key]);
+          t.push(model.weather[date][key]);
       }
 
       arr.push(t);
@@ -126,9 +133,9 @@ function set(model, data) {
 
   $('#custom-weather-panel').html(html+'</table></div><div id="custom-weather-chart"></div>');
 
-  setTimeout(function(){
-      weatherCustomChart = chart.create($('#custom-weather-chart')[0], model.custom_weather);
-  }, 1000);
+  //setTimeout(function(){
+  //    weatherCustomChart = chart.create($('#custom-weather-chart')[0], model.weather);
+  //}, 1000);
 }
 
 module.exports = {

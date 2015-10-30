@@ -35,6 +35,8 @@ function create(root, data) {
 
   var rows = [];
   for( var date in data ) {
+    if( date.match(/\d\d/) ) continue;
+
       var obj = data[date];
       rows.push([
           parseInt(date.replace(/-/g, '')),

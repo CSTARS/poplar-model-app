@@ -173,6 +173,7 @@ var runModel = function(isRt) {
           } catch(e) {
             debugger;
             alert(e);
+            $("#runbtn, #runbtn-sm").removeClass("disabled").html("<i class='icon-play'></i> Run");
           }
 
 
@@ -237,6 +238,7 @@ var runVariation = function(index, runs) {
   } catch(e) {
     debugger;
     alert(e);
+    $("#runbtn, #runbtn-sm").removeClass("disabled").html("<i class='icon-play'></i> Run");
   }
 };
 
