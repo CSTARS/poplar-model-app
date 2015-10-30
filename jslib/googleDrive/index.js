@@ -99,13 +99,13 @@ function init(callback) {
       gapi.load('drive-share', function(){
         // on load, show the share popup with the current tree
          client = new gapi.drive.share.ShareClient(Oauth.APP_ID);
-          client.setItemIds([loadedTree]);
+         client.setItemIds([loadedTree]);
          client.showSettingsDialog();
        });
     } else {
       // we have a client, show the share popup with current tree
       client.setItemIds([loadedFile]);
-       client.showSettingsDialog();
+      client.showSettingsDialog();
     }
   });
 
